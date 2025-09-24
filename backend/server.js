@@ -1,39 +1,41 @@
 const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
-
+const axios = require('axios')
 const app = express()
-const PORT = process.env.PORT || 5001; // change to 5001
-
+const PORT = process.env.PORT || 5001; // Fixed: Actually use 5001
 
 // -----------------------------
-// CORS Middleware
+// CORS Middleware (FIXED)
 // -----------------------------
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://localhost:3002'
-]
-
-app.use(cors({
-  origin: allowedOrigins,
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001', 
+    'http://localhost:3002',
+    'https://art-indol-seven.vercel.app' // Your production frontend
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-}))
+}
+
+// Apply CORS once with all origins
+app.use(cors(corsOptions))
 
 // Handle preflight requests
-app.options('*', cors({
-  origin: allowedOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}))
+app.options('*', cors(corsOptions))
 
 // -----------------------------
 // Middleware
 // -----------------------------
 app.use(express.json())
+
+// Add request logging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.path}`)
+  next()
+})
 
 // -----------------------------
 // Mock products data
@@ -92,10 +94,88 @@ const mockProducts = [
 // -----------------------------
 // Routes
 // -----------------------------
+
+// Health check
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() })
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    port: PORT
+  })
 })
 
+// ✅ REVERTED: Loan evaluation route using your original Render agentic AI
+app.post('/api/loan/evaluate', async (req, res) => {
+  try {
+    console.log('📥 Loan evaluation request received:', req.body)
+    
+    // Validate request
+    if (!req.body.seller_id || !req.body.craft_type) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields: seller_id or craft_type'
+      })
+    }
+    
+    console.log('📤 Forwarding to agentic AI...')
+    
+    // Forward the request to your agentic AI on Render
+    const response = await axios.post(
+      'https://artisan-loan-agent.onrender.com/loan/evaluate',
+      req.body,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 120000 // 2 minutes timeout
+      }
+    )
+    
+    console.log('📥 Agentic AI response received:', response.data)
+    
+    // Return the AI response to frontend
+    res.json({
+      success: true,
+      data: response.data,
+      timestamp: new Date().toISOString()
+    })
+    
+  } catch (error) {
+    console.error('❌ Loan evaluation error:', error.message)
+    
+    let errorMessage = 'Loan evaluation failed'
+    let statusCode = 500
+    
+    if (error.code === 'ECONNABORTED') {
+      errorMessage = 'AI service timeout - analysis taking longer than expected'
+      statusCode = 408
+    } else if (error.response) {
+      errorMessage = error.response.data?.message || `AI service error: ${error.response.status}`
+      statusCode = error.response.status >= 400 && error.response.status < 500 ? 400 : 500
+    } else if (error.request) {
+      errorMessage = 'Cannot reach AI service - service may be down'
+      statusCode = 503
+    }
+    
+    res.status(statusCode).json({
+      success: false,
+      message: errorMessage,
+      timestamp: new Date().toISOString()
+    })
+  }
+})
+
+// Loan health check
+app.get('/api/loan/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Loan evaluation service is running',
+    agentic_ai_url: 'https://artisan-loan-agent.onrender.com/loan/evaluate',
+    timestamp: new Date().toISOString()
+  })
+})
+
+// Products API
 app.get('/api/products', (req, res) => {
   console.log('Products API called')
   res.json({
@@ -129,52 +209,74 @@ app.get('/api/products/:id', (req, res) => {
   })
 })
 
-// -----------------------------
-// Auth routes
-// -----------------------------
-app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body
+// Import auth routes (make sure this file exists)
+try {
+  const authRoutes = require('./src/routes/auth')
+  app.use('/api/auth', authRoutes)
+  console.log('✅ Auth routes loaded successfully')
+} catch (error) {
+  console.warn('⚠️ Auth routes not found, creating simple auth endpoints...')
   
-  res.json({
-    success: true,
-    message: 'Login successful',
-    data: {
-      user: {
-        id: '1',
-        name: 'John Doe',
-        email: email,
-        userType: 'customer'
-      },
-      token: 'mock-jwt-token'
-    }
+  // Simple auth endpoints if auth routes file doesn't exist
+  app.post('/api/auth/login', (req, res) => {
+    const { email, password } = req.body
+    
+    res.json({
+      success: true,
+      message: 'Login successful',
+      data: {
+        user: {
+          id: '1',
+          name: 'John Doe',
+          email: email,
+          userType: 'customer'
+        },
+        token: 'mock-jwt-token'
+      }
+    })
   })
-})
 
-app.post('/api/auth/signup', (req, res) => {
-  const { name, email, password } = req.body
-  
-  res.json({
-    success: true,
-    message: 'Account created successfully',
-    data: {
-      user: {
-        id: '1',
-        name: name,
-        email: email,
-        userType: null
-      },
-      token: 'mock-jwt-token'
-    }
+  app.post('/api/auth/signup', (req, res) => {
+    const { name, email, password } = req.body
+    
+    res.json({
+      success: true,
+      message: 'Account created successfully',
+      data: {
+        user: {
+          id: '1',
+          name: name,
+          email: email,
+          userType: null
+        },
+        token: 'mock-jwt-token'
+      }
+    })
   })
-})
+
+  app.get('/api/auth/profile', (req, res) => {
+    res.json({
+      success: true,
+      data: {
+        user: {
+          id: '1',
+          name: 'John Doe',
+          email: 'user@example.com',
+          userType: 'customer'
+        }
+      }
+    })
+  })
+}
 
 // -----------------------------
 // 404 handler
 // -----------------------------
 app.use('*', (req, res) => {
+  console.log(`❌ 404 - Route not found: ${req.method} ${req.originalUrl}`)
   res.status(404).json({
     success: false,
-    message: 'Route not found'
+    message: `Route not found: ${req.method} ${req.originalUrl}`
   })
 })
 
@@ -182,7 +284,7 @@ app.use('*', (req, res) => {
 // Error handler
 // -----------------------------
 app.use((err, req, res, next) => {
-  console.error('Server Error:', err)
+  console.error('❌ Server Error:', err)
   res.status(500).json({
     success: false,
     message: 'Internal server error'
@@ -196,4 +298,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`)
   console.log(`📊 Health check: http://localhost:${PORT}/health`)
   console.log(`🛍️  Products API: http://localhost:${PORT}/api/products`)
+  console.log(`🏦 Loan evaluation: http://localhost:${PORT}/api/loan/evaluate`)
+  console.log(`👤 Auth endpoints: http://localhost:${PORT}/api/auth/*`)
+  console.log(`🌐 CORS enabled for: localhost:3000-3002`)
 })

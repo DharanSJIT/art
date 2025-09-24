@@ -1,10 +1,9 @@
-const jwt = require('jsonwebtoken')
-const { getFirestore } = require('../services/firebaseService')
+const { getAuth, getFirestore } = require('../services/firebaseService')
 
 const auth = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '')
-    
+
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -12,24 +11,27 @@ const auth = async (req, res, next) => {
       })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    
-    // Get user from Firestore
+    // Verify Firebase ID token
+    const decodedToken = await getAuth().verifyIdToken(token)
+
+    // Get user from Firestore using Firebase UID
     const db = getFirestore()
-    const userDoc = await db.collection('users').doc(decoded.userId).get()
-    
+    const userDoc = await db.collection('users').doc(decodedToken.uid).get()
+
     if (!userDoc.exists) {
       return res.status(401).json({
         success: false,
-        message: 'Token is not valid.'
+        message: 'User not found.'
       })
     }
 
     req.user = {
-      id: decoded.userId,
+      id: decodedToken.uid,
+      firebaseUid: decodedToken.uid,
+      email: decodedToken.email,
       ...userDoc.data()
     }
-    
+
     next()
   } catch (error) {
     console.error('Auth middleware error:', error)
@@ -43,20 +45,22 @@ const auth = async (req, res, next) => {
 const optionalAuth = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '')
-    
+
     if (token) {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET)
+      const decodedToken = await getAuth().verifyIdToken(token)
       const db = getFirestore()
-      const userDoc = await db.collection('users').doc(decoded.userId).get()
-      
+      const userDoc = await db.collection('users').doc(decodedToken.uid).get()
+
       if (userDoc.exists) {
         req.user = {
-          id: decoded.userId,
+          id: decodedToken.uid,
+          firebaseUid: decodedToken.uid,
+          email: decodedToken.email,
           ...userDoc.data()
         }
       }
     }
-    
+
     next()
   } catch (error) {
     // Continue without user info if token is invalid

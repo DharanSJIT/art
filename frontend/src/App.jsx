@@ -22,6 +22,9 @@ import CheckoutPage from './pages/CheckoutPage'
 import ShoppingCart from './components/cart/ShoppingCart'
 import Wishlist from './components/wishlist/Wishlist'
 import CustomerAccount from './components/account/CustomerAccount'
+import InternshipApplication from './pages/InternshipApplication'
+import LoanEvaluation from './pages/LoanEvaluation'
+
 
 function App() {
   return (
@@ -51,7 +54,9 @@ function App() {
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/account" element={<CustomerAccount />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/internships/apply" element={<InternshipApplication />} />
               <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
+              
             </Routes>
           </div>
           <Toaster position="top-right" />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { User, Package, Users, Truck, Plus, Search, Star, MapPin, CreditCard, DollarSign,CheckCircle,AlertCircle,FileText } from 'lucide-react'
+import LoanEvaluation from './LoanEvaluation'
 
 const SellerDashboard = () => {
   const [activeTab, setActiveTab] = useState('profile')
@@ -716,7 +717,8 @@ const SellerDashboard = () => {
     { id: 'orders', label: 'Orders', icon: Package },
     { id: 'collaboration', label: 'Collaboration Hub', icon: Users },
     { id: 'supply', label: 'Supply', icon: Truck },
-    { id: 'loan', label: 'Loans', icon: CreditCard }
+    { id: 'loan', label: 'Loans', icon: CreditCard },
+    { id: 'loaneval', label: 'Loans Evaluation', icon: CreditCard }
 
   ]
 
@@ -728,7 +730,7 @@ const SellerDashboard = () => {
           <div className="flex justify-between items-center h-16">
             <h1 className="text-2xl font-bold text-primary-600">Handmade Nexus - Seller</h1>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome, {sellerData.name}</span>
+              <span className="text-gray-700">Welcome</span>
               <button className="text-gray-500 hover:text-gray-700">
                 <User className="w-6 h-6" />
               </button>
@@ -771,6 +773,7 @@ const SellerDashboard = () => {
             {activeTab === 'collaboration' && <CollaborationTab />}
             {activeTab === 'supply' && <SupplyTab />}
             {activeTab === 'loan' && <LoanTab />}
+            {activeTab === 'loaneval' && <LoanEvaluation />}
           </div>
         </div>
       </div>

@@ -157,15 +157,15 @@ class GeminiService {
     try {
       const prompt = `
         Analyze this content for appropriateness in a handmade marketplace:
-        
+
         "${content}"
-        
+
         Check for:
         - Inappropriate language
         - Spam or promotional content
         - Misleading claims
         - Offensive material
-        
+
         Respond with JSON:
         {
           "isAppropriate": boolean,
@@ -176,7 +176,7 @@ class GeminiService {
       const result = await this.model.generateContent(prompt)
       const response = await result.response
       const text = response.text()
-      
+
       try {
         return JSON.parse(text)
       } catch {
@@ -185,6 +185,89 @@ class GeminiService {
     } catch (error) {
       console.error('Content moderation error:', error)
       return { isAppropriate: true, reason: 'Moderation service unavailable' }
+    }
+  }
+
+  async evaluateLoan(loanData) {
+    if (!this.genAI) {
+      throw new Error('Gemini AI not initialized')
+    }
+
+    try {
+      const prompt = `
+        You are an AI loan evaluator for artisans in a handmade marketplace. Analyze the following seller data and provide a comprehensive loan evaluation.
+
+        Seller Data:
+        - Seller ID: ${loanData.seller_id}
+        - Craft Type: ${loanData.craft_type}
+        - Transaction History:
+          - Total Orders: ${loanData.transaction_history.total_orders}
+          - Completed Orders: ${loanData.transaction_history.completed_orders}
+          - Delayed Orders: ${loanData.transaction_history.delayed_orders}
+          - Revenue Last 6 Months: ₹${loanData.transaction_history.revenue_last_6m}
+        - Customer Reviews: ${loanData.reviews.join('; ')}
+        - Number of Collaborations: ${loanData.collaborations}
+
+        Based on this data, provide a loan evaluation in the following JSON format:
+        {
+          "seller_id": "${loanData.seller_id}",
+          "risk_score": <number between 1-100, where lower is better>,
+          "risk_tier": "<low|medium|high>",
+          "loan_eligibility": <boolean>,
+          "recommended_loan_amount": <number in rupees, based on revenue and risk>,
+          "batch_size": <number, recommended production batch size>,
+          "reasoning": [
+            "<string: detailed reasoning point 1>",
+            "<string: detailed reasoning point 2>",
+            "<string: detailed reasoning point 3>",
+            "<string: detailed reasoning point 4>"
+          ]
+        }
+
+        Consider:
+        - Completion rate = completed_orders / total_orders
+        - Delay rate = delayed_orders / total_orders
+        - Revenue stability
+        - Review sentiment
+        - Collaboration network strength
+        - Craft type demand
+
+        Risk tiers:
+        - Low risk (score 1-30): High completion rate, low delays, good revenue, positive reviews
+        - Medium risk (31-70): Moderate performance
+        - High risk (71-100): Low completion rate, high delays, poor revenue, negative reviews
+
+        Loan eligibility: true if risk_score <= 70
+        Recommended amount: Based on 6-month revenue, risk tier, and craft type
+        Batch size: Based on craft type and collaboration capacity
+      `
+
+      const result = await this.model.generateContent(prompt)
+      const response = await result.response
+      const text = response.text()
+
+      // Clean the response text to extract JSON
+      const jsonMatch = text.match(/\{[\s\S]*\}/)
+      if (!jsonMatch) {
+        throw new Error('Invalid AI response format')
+      }
+
+      const evaluation = JSON.parse(jsonMatch[0])
+
+      // Validate the response structure
+      if (!evaluation.seller_id || typeof evaluation.risk_score !== 'number' ||
+          !['low', 'medium', 'high'].includes(evaluation.risk_tier) ||
+          typeof evaluation.loan_eligibility !== 'boolean' ||
+          typeof evaluation.recommended_loan_amount !== 'number' ||
+          typeof evaluation.batch_size !== 'number' ||
+          !Array.isArray(evaluation.reasoning)) {
+        throw new Error('Invalid evaluation data structure')
+      }
+
+      return evaluation
+    } catch (error) {
+      console.error('Loan evaluation error:', error)
+      throw new Error('Failed to evaluate loan application')
     }
   }
 }

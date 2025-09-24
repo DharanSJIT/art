@@ -1,20 +1,24 @@
 const express = require('express')
+const { body } = require('express-validator')
 const authController = require('../controllers/authController')
 const { auth } = require('../middleware/auth')
-const { validationRules, handleValidationErrors } = require('../middleware/validation')
+const { handleValidationErrors } = require('../middleware/validation')
 
 const router = express.Router()
 
 // Public routes
-router.post('/signup', 
-  validationRules.userSignup,
+router.post('/signup',
+  [
+    body('name')
+      .trim()
+      .isLength({ min: 2, max: 50 })
+      .withMessage('Name must be between 2 and 50 characters'),
+  ],
   handleValidationErrors,
   authController.signup
 )
 
-router.post('/login', 
-  validationRules.userLogin,
-  handleValidationErrors,
+router.post('/login',
   authController.login
 )
 
@@ -32,10 +36,5 @@ router.post('/set-user-type',
 )
 
 router.post('/logout', auth, authController.logout)
-
-router.post('/change-password', 
-  auth,
-  authController.changePassword
-)
 
 module.exports = router

@@ -926,9 +926,9 @@ const CustomerDashboard = () => {
                   <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-primary-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700 hidden md:block">
+                  {/* <span className="text-sm font-medium text-gray-700 hidden md:block">
                     {currentUser.name.split(' ')[0]}
-                  </span>
+                  </span> */}
                   <ChevronDown className="w-4 h-4 text-gray-400 hidden md:block" />
                 </button>
               </div>
