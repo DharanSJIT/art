@@ -3,17 +3,41 @@ const cors = require('cors')
 require('dotenv').config()
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5001; // change to 5001
 
-// Middleware
+
+// -----------------------------
+// CORS Middleware
+// -----------------------------
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002'
+]
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'],
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }))
 
+// Handle preflight requests
+app.options('*', cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}))
+
+// -----------------------------
+// Middleware
+// -----------------------------
 app.use(express.json())
 
+// -----------------------------
 // Mock products data
+// -----------------------------
 const mockProducts = [
   {
     id: 1,
@@ -65,7 +89,9 @@ const mockProducts = [
   }
 ]
 
+// -----------------------------
 // Routes
+// -----------------------------
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() })
 })
@@ -103,7 +129,9 @@ app.get('/api/products/:id', (req, res) => {
   })
 })
 
+// -----------------------------
 // Auth routes
+// -----------------------------
 app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body
   
@@ -140,7 +168,9 @@ app.post('/api/auth/signup', (req, res) => {
   })
 })
 
+// -----------------------------
 // 404 handler
+// -----------------------------
 app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
@@ -148,7 +178,9 @@ app.use('*', (req, res) => {
   })
 })
 
+// -----------------------------
 // Error handler
+// -----------------------------
 app.use((err, req, res, next) => {
   console.error('Server Error:', err)
   res.status(500).json({
@@ -157,6 +189,9 @@ app.use((err, req, res, next) => {
   })
 })
 
+// -----------------------------
+// Start server
+// -----------------------------
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`)
   console.log(`📊 Health check: http://localhost:${PORT}/health`)

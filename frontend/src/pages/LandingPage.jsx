@@ -426,15 +426,7 @@ const LandingPage = () => {
                     <MapPin className="w-4 h-4 mr-1" />
                     <span>{product.seller} • {product.location}</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xl font-bold text-gray-900">{product.price}</span>
-                      <span className="text-sm text-gray-500 line-through">{product.originalPrice}</span>
-                    </div>
-                    <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
-                      Add to Cart
-                    </button>
-                  </div>
+                  
                 </div>
               </div>
             ))}
