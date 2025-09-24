@@ -189,9 +189,7 @@ const LandingPage = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
-                <Palette className="w-6 h-6 text-white" />
-              </div>
+              
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Handmade Nexus</h1>
                 <p className="text-xs text-orange-600">Crafted with Love</p>
@@ -326,12 +324,12 @@ const LandingPage = () => {
               </div>
               
               {/* Floating badges */}
-              <div className="absolute -top-4 -left-4 bg-white rounded-xl shadow-lg p-3 animate-bounce">
+              {/* <div className="absolute -top-4 -left-4 bg-white rounded-xl shadow-lg p-3 animate-bounce">
                 <div className="text-orange-500 font-bold">100% Authentic</div>
               </div>
               <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg p-3 animate-pulse">
                 <div className="text-green-500 font-bold">✓ Verified</div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -603,17 +601,7 @@ const LandingPage = () => {
               <p className="text-gray-400 mb-6">
                 India's premier marketplace for authentic handmade products, connecting artisans with customers worldwide.
               </p>
-              <div className="flex space-x-4">
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                  <span className="text-sm">📘</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                  <span className="text-sm">📷</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                  <span className="text-sm">🐦</span>
-                </div>
-              </div>
+              
             </div>
             
             <div>

@@ -21,13 +21,11 @@ const ProductDetail = () => {
         setProduct({
           id: parseInt(id),
           name: 'Handmade Ceramic Vase',
-          price: 45.99,
-          originalPrice: 59.99,
+          price: 399,
+          originalPrice: 499,
           images: [
-            'https://via.placeholder.com/500x500?text=Main+Image',
-            'https://via.placeholder.com/500x500?text=Side+View',
-            'https://via.placeholder.com/500x500?text=Top+View',
-            'https://via.placeholder.com/500x500?text=Detail+View'
+            'https://m.media-amazon.com/images/I/71Oz0k1FovL.jpg',
+         
           ],
           seller: {
             name: 'John Potter',
@@ -97,15 +95,15 @@ The intricate designs are hand-painted using traditional techniques passed down 
             {
               id: 7,
               name: 'Ceramic Bowl Set',
-              price: 29.99,
-              image: 'https://via.placeholder.com/200x200?text=Bowl+Set',
+              price: 299,
+              image: 'https://market99.com/cdn/shop/files/WW10005909-1.1_6ded6141-5ef3-4564-9cef-0cd303b0b5ae.jpg?v=1750238169',
               rating: 4.6
             },
             {
               id: 8,
               name: 'Pottery Dinner Plate',
-              price: 19.99,
-              image: 'https://via.placeholder.com/200x200?text=Dinner+Plate',
+              price: 399,
+              image: 'https://nestasia.in/cdn/shop/products/DIN04-VERAWHITE-BN820CN_1.jpg?v=1706785497&width=600',
               rating: 4.8
             }
           ]
@@ -214,15 +212,15 @@ The intricate designs are hand-painted using traditional techniques passed down 
               </div>
               
               <div className="flex items-center space-x-4 mb-6">
-                <span className="text-3xl font-bold text-primary-600">${product.price}</span>
+                <span className="text-3xl font-bold text-primary-600">Rs. {product.price}</span>
                 {product.originalPrice > product.price && (
                   <span className="text-xl text-gray-500 line-through">
-                    ${product.originalPrice}
+                    Rs. {product.originalPrice}
                   </span>
                 )}
                 {product.originalPrice > product.price && (
                   <span className="text-sm bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                    Save ${(product.originalPrice - product.price).toFixed(2)}
+                    Save Rs. {(product.originalPrice - product.price).toFixed(2)}
                   </span>
                 )}
               </div>
@@ -436,7 +434,7 @@ The intricate designs are hand-painted using traditional techniques passed down 
                   <h3 className="font-medium text-gray-900 mb-2">{relatedProduct.name}</h3>
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-bold text-primary-600">
-                      ${relatedProduct.price}
+                      Rs. {relatedProduct.price}
                     </span>
                     <div className="flex items-center">
                       <Star className="w-4 h-4 text-yellow-400 fill-current" />

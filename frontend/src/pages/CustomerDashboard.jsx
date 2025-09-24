@@ -76,7 +76,7 @@ const CustomerDashboard = () => {
       
       // Try to fetch from API first
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/products`)
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URLl || 'http://localhost:5000/apii'}/products`)
         if (response.ok) {
           const data = await response.json()
           if (data.success && data.data.products) {
@@ -97,12 +97,10 @@ const CustomerDashboard = () => {
             name: 'Handmade Ceramic Vase with Traditional Blue Pottery Patterns',
             price: 45.99,
             originalPrice: 59.99,
-            image: 'https://picsum.photos/400/400?random=1',
+            image: 'https://m.media-amazon.com/images/I/71Oz0k1FovL.jpg',
             images: [
               'https://picsum.photos/400/400?random=1',
-              'https://picsum.photos/400/400?random=2',
-              'https://picsum.photos/400/400?random=3',
-              'https://picsum.photos/400/400?random=4'
+              
             ],
             seller: {
               id: 'seller1',
@@ -137,15 +135,15 @@ const CustomerDashboard = () => {
           },
           {
             id: 2,
-            name: 'Solid Oak Coffee Table with Intricate Carved Details',
+            name: 'Bamboo Crafts',
             price: 199.99,
             originalPrice: 249.99,
-            image: 'https://picsum.photos/400/400?random=5',
-            images: [
-              'https://picsum.photos/400/400?random=5',
-              'https://picsum.photos/400/400?random=6',
-              'https://picsum.photos/400/400?random=7'
-            ],
+            image: 'https://5.imimg.com/data5/SELLER/Default/2022/7/HY/CM/JB/139461272/bamboo-handicrafts-1531714725-4104928.jpeg',
+            // images: [
+            //   'https://picsum.photos/400/400?random=5',
+            //   'https://picsum.photos/400/400?random=6',
+            //   'https://picsum.photos/400/400?random=7'
+            // ],
             seller: {
               id: 'seller2',
               name: 'Sarah Carpenter',
@@ -179,16 +177,11 @@ const CustomerDashboard = () => {
           },
           {
             id: 3,
-            name: 'Handwoven Pure Silk Scarf with Traditional Banarasi Motifs',
+            name: 'Pearl Jewelry',
             price: 89.99,
             originalPrice: 119.99,
-            image: 'https://picsum.photos/400/400?random=8',
-            images: [
-              'https://picsum.photos/400/400?random=8',
-              'https://picsum.photos/400/400?random=9',
-              'https://picsum.photos/400/400?random=10',
-              'https://picsum.photos/400/400?random=11'
-            ],
+            image: 'https://chandranipearls.in/cdn/shop/files/S24264.jpg?v=1737288976',
+          
             seller: {
               id: 'seller3',
               name: 'Priya Weaver',
@@ -222,15 +215,11 @@ const CustomerDashboard = () => {
           },
           {
             id: 4,
-            name: 'Sterling Silver Pendant Necklace with Natural Gemstone',
+            name: 'Clay Pots',
             price: 129.99,
             originalPrice: 159.99,
-            image: 'https://picsum.photos/400/400?random=12',
-            images: [
-              'https://picsum.photos/400/400?random=12',
-              'https://picsum.photos/400/400?random=13',
-              'https://picsum.photos/400/400?random=14'
-            ],
+            image: 'https://images.picxy.com/cache/2020/9/11/52cbac73ab274e8df895ff5dca181cfd.jpg',
+           
             seller: {
               id: 'seller4',
               name: 'Rajesh Jeweller',
@@ -264,16 +253,11 @@ const CustomerDashboard = () => {
           },
           {
             id: 5,
-            name: 'Vintage Leather Messenger Bag with Brass Hardware',
+            name: 'Terracotta Art',
             price: 159.99,
             originalPrice: 199.99,
-            image: 'https://picsum.photos/400/400?random=15',
-            images: [
-              'https://picsum.photos/400/400?random=15',
-              'https://picsum.photos/400/400?random=16',
-              'https://picsum.photos/400/400?random=17',
-              'https://picsum.photos/400/400?random=18'
-            ],
+            image: 'https://www.mptourism.com/web/image/catalog/2024/TerracottaArt-of-Madhya-Pradesh1.jpg',
+            
             seller: {
               id: 'seller5',
               name: 'Ahmed Leather',
@@ -307,15 +291,11 @@ const CustomerDashboard = () => {
           },
           {
             id: 6,
-            name: 'Hand Forged Iron Candle Stand Set of Three',
+            name: 'Wooden Carvings',
             price: 79.99,
             originalPrice: 99.99,
-            image: 'https://picsum.photos/400/400?random=19',
-            images: [
-              'https://picsum.photos/400/400?random=19',
-              'https://picsum.photos/400/400?random=20',
-              'https://picsum.photos/400/400?random=21'
-            ],
+            image: 'https://hanumantimbers.com/wp-content/uploads/2022/06/1.jpg',
+           
             seller: {
               id: 'seller6',
               name: 'Vikram Blacksmith',
@@ -349,14 +329,10 @@ const CustomerDashboard = () => {
           },
           {
             id: 7,
-            name: 'Handblown Glass Decorative Bowl with Gold Rim',
+            name: 'Jute Bags',
             price: 67.99,
             originalPrice: 84.99,
-            image: 'https://picsum.photos/400/400?random=22',
-            images: [
-              'https://picsum.photos/400/400?random=22',
-              'https://picsum.photos/400/400?random=23'
-            ],
+            image: 'https://m.media-amazon.com/images/I/81ZvyWAG10L._UF1000,1000_QL80_.jpg',
             seller: {
               id: 'seller7',
               name: 'Maya Glass Artist',
@@ -367,7 +343,7 @@ const CustomerDashboard = () => {
               totalSales: 67,
               memberSince: '2022'
             },
-            category: 'glass',
+            category: 'Stone Sculptures',
             rating: 4.4,
             reviewCount: 15,
             description: 'Elegant handblown glass decorative bowl with gold rim detail. Perfect for fruits or as a centerpiece.',
@@ -393,7 +369,7 @@ const CustomerDashboard = () => {
             name: 'Acrylic Landscape Painting on Canvas',
             price: 245.99,
             originalPrice: 299.99,
-            image: 'https://picsum.photos/400/400?random=24',
+            image: 'https://cangguco.com/cdn/shop/products/4a74d11f-b74f-4df7-b6a9-184555637fbf_3024x.jpg?v=1571831042',
             images: [
               'https://picsum.photos/400/400?random=24',
               'https://picsum.photos/400/400?random=25'
@@ -745,11 +721,11 @@ const CustomerDashboard = () => {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <span className="text-lg font-bold text-primary-600">
-              ${product.price}
+              Rs. {product.price}
             </span>
             {product.originalPrice > product.price && (
               <span className="text-sm text-gray-500 line-through">
-                ${product.originalPrice}
+                Rs. {product.originalPrice}
               </span>
             )}
           </div>
@@ -761,14 +737,14 @@ const CustomerDashboard = () => {
         </div>
         
         {/* Delivery Info */}
-        <div className="flex items-center text-xs text-gray-500 mb-4">
+        {/* <div className="flex items-center text-xs text-gray-500 mb-4">
           <Truck className="w-4 h-4 mr-1" />
           <span>
             Delivery by {calculateDeliveryDate(product.deliveryTime)}
             {product.freeShipping ? ' (Free)' : ` (+$${product.shippingCost})`}
           </span>
         </div>
-        
+         */}
         {/* Action Buttons */}
         <div className="flex space-x-2 mb-2">
           <button
@@ -915,9 +891,9 @@ const CustomerDashboard = () => {
             {/* Header Actions */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               <button className="relative p-2 text-gray-600 hover:text-primary-600 transition-colors duration-200">
-                <Bell className="w-6 h-6" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                  </span>
+                {/* <Bell className="w-6 h-6" /> */}
+                {/* <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                  </span> */}
               </button>
               
               <button 
@@ -964,9 +940,9 @@ const CustomerDashboard = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          {/* <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Welcome back, {currentUser.name.split(' ')[0]}! 👋
-          </h1>
+          </h1> */}
           <p className="text-gray-600">
             Discover unique handmade products from talented artisans across India
           </p>
@@ -976,7 +952,7 @@ const CustomerDashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-white p-4 rounded-lg border border-gray-200">
             <div className="flex items-center">
-              <Package className="w-8 h-8 text-blue-500 mr-3" />
+              {/* <Package className="w-8 h-8 text-blue-500 mr-3" /> */}
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Products</p>
                 <p className="text-2xl font-bold text-gray-900">{products.length}</p>
@@ -985,7 +961,7 @@ const CustomerDashboard = () => {
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
             <div className="flex items-center">
-              <Heart className="w-8 h-8 text-red-500 mr-3" />
+              {/* <Heart className="w-8 h-8 text-red-500 mr-3" /> */}
               <div>
                 <p className="text-sm font-medium text-gray-600">Wishlist Items</p>
                 <p className="text-2xl font-bold text-gray-900">{wishlist.length}</p>
@@ -994,7 +970,7 @@ const CustomerDashboard = () => {
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
             <div className="flex items-center">
-              <ShoppingCart className="w-8 h-8 text-green-500 mr-3" />
+              {/* <ShoppingCart className="w-8 h-8 text-green-500 mr-3" /> */}
               <div>
                 <p className="text-sm font-medium text-gray-600">Cart Items</p>
                 <p className="text-2xl font-bold text-gray-900">{getCartItemCount()}</p>
@@ -1003,7 +979,7 @@ const CustomerDashboard = () => {
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
             <div className="flex items-center">
-              <Star className="w-8 h-8 text-yellow-500 mr-3" />
+              {/* <Star className="w-8 h-8 text-yellow-500 mr-3" /> */}
               <div>
                 <p className="text-sm font-medium text-gray-600">Avg Rating</p>
                 <p className="text-2xl font-bold text-gray-900">
@@ -1235,28 +1211,7 @@ const CustomerDashboard = () => {
         )}
 
         {/* Featured Section */}
-        {!loading && products.length > 0 && (
-          <div className="mt-16">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">Featured Products</h2>
-              <Link
-                to="/featured"
-                className="text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200"
-              >
-                View All Featured →
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {products
-                .filter(p => p.isFeatured)
-                .slice(0, 4)
-                .map((product) => (
-                  <ProductCard key={`featured-${product.id}`} product={product} />
-                ))
-              }
-            </div>
-          </div>
-        )}
+       
 
         {/* Newsletter Signup */}
         <div className="mt-16 bg-primary-50 rounded-2xl p-8 text-center">
