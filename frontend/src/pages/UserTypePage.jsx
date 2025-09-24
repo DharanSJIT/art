@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingBag, Store } from 'lucide-react'
+import { ShoppingBag, Store, Shield, Globe, Star } from 'lucide-react'
 
 const UserTypePage = () => {
   const navigate = useNavigate()
@@ -73,9 +73,32 @@ const UserTypePage = () => {
                 Continue as Seller
               </div>
             </div>
+            
+          </div>
+          
+        </div>
+        <div className="text-center mt-16">
+          <p className="text-slate-500 text-sm">
+            Join over 50,000 creators and customers in our trusted community
+          </p>
+          <div className="flex justify-center items-center gap-6 mt-4 text-slate-400">
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4" />
+              <span className="text-xs font-medium">Secure Platform</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Globe className="w-4 h-4" />
+              <span className="text-xs font-medium">Worldwide Shipping</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="w-4 h-4" />
+              <span className="text-xs font-medium">5-Star Support</span>
+            </div>
           </div>
         </div>
+        
       </div>
+      
     </div>
   )
 }
