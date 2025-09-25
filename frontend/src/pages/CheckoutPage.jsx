@@ -496,7 +496,7 @@ const CheckoutPage = () => {
                     <div className="text-xs text-gray-500">Qty: {item.quantity}</div>
                   </div>
                   <div className="text-sm font-medium text-gray-900">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    Rs. {(item.price * item.quantity).toFixed(2)}
                   </div>
                 </div>
               ))}
@@ -506,13 +506,13 @@ const CheckoutPage = () => {
             <div className="space-y-2 text-sm mb-4 pb-4 border-b border-gray-100">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
-                <span className="text-gray-900 font-medium">${orderData.pricing.subtotal.toFixed(2)}</span>
+                <span className="text-gray-900 font-medium">Rs. {orderData.pricing.subtotal.toFixed(2)}</span>
               </div>
               
               {orderData.coupon && (
                 <div className="flex justify-between text-green-600">
                   <span>Discount</span>
-                  <span>-${orderData.pricing.discount.toFixed(2)}</span>
+                  <span>-Rs. {orderData.pricing.discount.toFixed(2)}</span>
                 </div>
               )}
               
@@ -529,20 +529,20 @@ const CheckoutPage = () => {
               
               <div className="flex justify-between">
                 <span className="text-gray-600">Tax (7%)</span>
-                <span className="text-gray-900">${orderData.pricing.tax.toFixed(2)}</span>
+                <span className="text-gray-900">Rs.{orderData.pricing.tax.toFixed(2)}</span>
               </div>
             </div>
             
             {/* Total */}
             <div className="flex justify-between mb-6">
               <span className="text-gray-900 font-semibold">Total</span>
-              <span className="text-xl text-primary-600 font-bold">${orderData.pricing.total.toFixed(2)}</span>
+              <span className="text-xl text-primary-600 font-bold">Rs. {orderData.pricing.total.toFixed(2)}</span>
             </div>
             
             <div className="space-y-3 mt-6 text-sm text-gray-600">
               <div className="flex items-start gap-2">
                 <Truck className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
-                <span>Free shipping on orders over $100</span>
+                <span>Free shipping on orders over Rs.100</span>
               </div>
               <div className="flex items-start gap-2">
                 <ShoppingBag className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />

@@ -66,10 +66,10 @@ const MiniCart = ({ isOpen, onClose }) => {
                                 >
                                   <h3 className="line-clamp-2">{item.name}</h3>
                                 </Link>
-                                <p className="ml-4">${(item.price * item.quantity).toFixed(2)}</p>
+                                <p className="ml-4">Rs. {(item.price * item.quantity).toFixed(2)}</p>
                               </div>
                               <p className="mt-1 text-sm text-gray-500">
-                                ${item.price.toFixed(2)} each
+                               Rs. {item.price.toFixed(2)} each
                               </p>
                             </div>
                             

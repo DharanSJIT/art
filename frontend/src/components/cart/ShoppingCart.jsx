@@ -311,12 +311,12 @@ const ShoppingCart = () => {
                     
                     <div className="text-right">
                       <div className="text-lg font-semibold text-gray-900">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        Rs. {(item.price * item.quantity).toFixed(2)}
                       </div>
                       
                       {item.originalPrice && item.originalPrice > item.price && (
                         <div className="text-sm text-gray-500 line-through">
-                          ${(item.originalPrice * item.quantity).toFixed(2)}
+                          Rs. {(item.originalPrice * item.quantity).toFixed(2)}
                         </div>
                       )}
                       
@@ -389,13 +389,13 @@ const ShoppingCart = () => {
             <div className="space-y-2 text-sm mb-4 pb-4 border-b border-gray-100">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
-                <span className="text-gray-900 font-medium">${calculateSubtotal().toFixed(2)}</span>
+                <span className="text-gray-900 font-medium">Rs. {calculateSubtotal().toFixed(2)}</span>
               </div>
               
               {appliedCoupon && (
                 <div className="flex justify-between text-green-600">
                   <span>Discount</span>
-                  <span>-${calculateDiscount().toFixed(2)}</span>
+                  <span>-Rs. {calculateDiscount().toFixed(2)}</span>
                 </div>
               )}
               
@@ -412,14 +412,14 @@ const ShoppingCart = () => {
               
               <div className="flex justify-between">
                 <span className="text-gray-600">Tax (7%)</span>
-                <span className="text-gray-900">${calculateTax().toFixed(2)}</span>
+                <span className="text-gray-900">Rs. {calculateTax().toFixed(2)}</span>
               </div>
             </div>
             
             {/* Total */}
             <div className="flex justify-between mb-6">
               <span className="text-gray-900 font-semibold">Total</span>
-              <span className="text-xl text-primary-600 font-bold">${calculateTotal().toFixed(2)}</span>
+              <span className="text-xl text-primary-600 font-bold">Rs. {calculateTotal().toFixed(2)}</span>
             </div>
             
             <button

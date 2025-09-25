@@ -24,6 +24,8 @@ import Wishlist from './components/wishlist/Wishlist'
 import CustomerAccount from './components/account/CustomerAccount'
 import InternshipApplication from './pages/InternshipApplication'
 import LoanEvaluation from './pages/LoanEvaluation'
+import Explore from './pages/Explore'
+
 
 
 function App() {
@@ -56,6 +58,8 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/internships/apply" element={<InternshipApplication />} />
               <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
+              {/* <Route path="/loan-evaluation" element={<LoanEvaluation />} /> */}
+              <Route path="/explore" element={<Explore />} />
               
             </Routes>
           </div>
