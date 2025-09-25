@@ -29,7 +29,7 @@ const UserTypePage = () => {
           {/* Customer Option (Updated to primary color) */}
           <div 
             onClick={() => handleUserTypeSelection('customer')}
-            className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-xl transition-shadow border-2 border-transparent hover:border-primary-500 flex flex-col"
+            className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-sm transition-shadow border-2 border-transparent hover:border-primary-200 flex flex-col"
           >
             <div className="text-center flex-grow">
               
@@ -52,7 +52,7 @@ const UserTypePage = () => {
           {/* Seller Option */}
           <div 
             onClick={() => handleUserTypeSelection('seller')}
-            className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-xl transition-shadow border-2 border-transparent hover:border-primary-500 flex flex-col"
+            className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-xl transition-shadow border-2 border-transparent hover:border-primary-200 flex flex-col"
           >
             <div className="text-center flex-grow">
               
@@ -75,7 +75,7 @@ const UserTypePage = () => {
           {/* Intern Option (Updated to primary color) */}
           <div 
             onClick={() => handleUserTypeSelection('intern')}
-            className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-xl transition-shadow border-2 border-transparent hover:border-primary-500 flex flex-col"
+            className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-xl transition-shadow border-2 border-transparent hover:border-primary-200 flex flex-col"
           >
             <div className="text-center flex-grow">
              

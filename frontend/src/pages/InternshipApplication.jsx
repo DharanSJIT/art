@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import emailjs from '@emailjs/browser';
 import { 
-  User, Mail, Phone, GraduationCap, Calendar, MapPin, Fingerprint, Send 
+  User, Mail, Phone, GraduationCap, Calendar, MapPin, Fingerprint, Send, MessageSquare 
 } from 'lucide-react';
 
 const ApplicationForm = () => {
@@ -15,7 +16,8 @@ const ApplicationForm = () => {
     location: '',
     education: '',
     email: '',
-    aadharNumber: ''
+    aadharNumber: '',
+    experience: '' // 1. Added new state for the experience field
   });
 
   const handleChange = (e) => {
@@ -29,15 +31,14 @@ const ApplicationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation for all fields
-    const requiredFields = ['fullName', 'age', 'phone', 'location', 'education', 'email', 'aadharNumber'];
+    // 2. Added 'experience' to the list of required fields
+    const requiredFields = ['fullName', 'age', 'phone', 'location', 'education', 'email', 'aadharNumber', 'experience'];
     for (const field of requiredFields) {
       if (!formData[field]) {
         toast.error(`Please fill out the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field.`);
         return;
       }
     }
-    // Aadhar number simple validation
     if (formData.aadharNumber.length !== 12 || !/^\d+$/.test(formData.aadharNumber)) {
         toast.error('Please enter a valid 12-digit Aadhar Number.');
         return;
@@ -46,29 +47,47 @@ const ApplicationForm = () => {
     setLoading(true);
     toast.loading('Submitting your details...');
 
-    // --- MOCK SUBMISSION ---
-    // In a real application, you would send this data to your secure backend.
-    // NEVER store sensitive data like Aadhar numbers in a publicly accessible database.
-    
-    setTimeout(() => {
-      console.log('Form Data Submitted:', formData);
-      toast.dismiss();
-      toast.success('Details submitted successfully!');
-      setLoading(false);
-      navigate('/'); // Redirect to homepage after submission
-    }, 2000);
+    const templateParams = {
+        fullName: formData.fullName,
+        age: formData.age,
+        email: formData.email,
+        phone: formData.phone,
+        location: formData.location,
+        education: formData.education,
+        aadharNumber: formData.aadharNumber,
+        experience: formData.experience, // 3. Added experience to the data sent via email
+    };
+
+    try {
+        await emailjs.send(
+            import.meta.env.VITE_EMAILJS_SERVICE_ID,
+            import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+            templateParams,
+            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        );
+
+        toast.dismiss();
+        toast.success('Details submitted successfully!');
+        navigate('/'); // Redirect on success
+    } catch (error) {
+        toast.dismiss();
+        console.error('EmailJS Error:', error);
+        toast.error('Failed to send application. Please try again later.');
+    } finally {
+        setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900">Artisan Community Application</h2>
+          {/* 4. Changed the title and description */}
+          <h2 className="text-3xl font-extrabold text-gray-900">Internship Application Form</h2>
           <p className="mt-2 text-sm text-gray-600">
-            Please provide your details to join our community.
+            Please fill out the details below to apply for our internship program.
           </p>
         </div>
-
         <div className="mt-8 bg-white shadow-lg rounded-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -92,16 +111,32 @@ const ApplicationForm = () => {
                 maxLength={12}
               />
               <p className="mt-2 text-xs text-gray-500">
-                Your data is sensitive and will be kept confidential. Please ensure you are on a secure connection.
+                Your data is sensitive and will be kept confidential.
               </p>
             </div>
 
+            {/* 5. Added the new description/experience textarea */}
+            <div>
+                <label htmlFor="experience" className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <MessageSquare className="h-5 w-5 text-gray-400 mr-2" />
+                  Share Your Experience
+                </label>
+                <textarea 
+                  id="experience" 
+                  name="experience" 
+                  rows="5" 
+                  value={formData.experience} 
+                  onChange={handleChange} 
+                  required 
+                  className="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md p-2" 
+                  placeholder="Tell us about your previous experience, skills, or why you are interested in this internship..."
+                ></textarea>
+            </div>
 
-            {/* Submission */}
             <div className="text-right pt-4">
               <button type="submit" disabled={loading} className="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed">
                 <Send className="w-5 h-5 mr-2 -ml-1" />
-                {loading ? 'Submitting...' : 'Submit Details'}
+                {loading ? 'Submitting...' : 'Submit Application'}
               </button>
             </div>
           </form>
@@ -128,7 +163,7 @@ const InputField = ({ name, label, type, value, onChange, icon: Icon, required =
         required={required}
         maxLength={maxLength}
         className="focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md p-2"
-        min={type === 'number' ? '18' : undefined} // Example: set min age to 18
+        min={type === 'number' ? '18' : undefined}
       />
     </div>
   </div>

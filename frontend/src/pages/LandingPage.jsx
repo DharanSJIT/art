@@ -253,7 +253,7 @@ const LandingPage = () => {
                 </div>
                 <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                   Discover
-                  <span className="text-orange-500"> Authentic</span>
+                  Authentic
                   <br />
                   Handmade Treasures
                 </h1>
