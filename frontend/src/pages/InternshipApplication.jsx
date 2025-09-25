@@ -85,7 +85,7 @@ const ApplicationForm = () => {
         <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-2xl overflow-hidden">
           
           {/* Left Branding Panel */}
-          <div className="md:w-2/5 bg-primary-400 text-white p-8 md:p-12 flex flex-col justify-between">
+          <div className="md:w-2/5 bg-gray-500 text-white p-8 md:p-12 flex flex-col justify-between">
             <div>
               <h2 className="text-3xl font-bold mb-4">Join Our Team</h2>
               <p className="mb-8 opacity-90">
@@ -151,7 +151,7 @@ const ApplicationForm = () => {
               </section>
 
               <div className="pt-4">
-                <button type="submit" disabled={loading} className="w-full inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-primary-400 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300">
+                <button type="submit" disabled={loading} className="w-full inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-primary-500  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300">
                   <Send className="w-5 h-5 mr-3" />
                   {loading ? 'Submitting...' : 'Submit Application'}
                 </button>

@@ -52,7 +52,7 @@ const Wishlist = () => {
         name: 'Handmade Ceramic Vase with Traditional Blue Pottery Patterns',
         price: 45.99,
         originalPrice: 59.99,
-        image: 'https://picsum.photos/400/400?random=1',
+        image: 'https://thumbs.dreamstime.com/b/three-traditional-chinese-ceramic-vases-elegant-blue-floral-patterns-white-porcelain-antique-artwork-handmade-home-decor-still-387846306.jpg',
         seller: {
           name: 'John Potter',
           location: 'Chennai, Tamil Nadu',
@@ -69,7 +69,7 @@ const Wishlist = () => {
         name: 'Solid Oak Coffee Table with Intricate Carved Details',
         price: 199.99,
         originalPrice: 249.99,
-        image: 'https://picsum.photos/400/400?random=5',
+        image: 'https://m.media-amazon.com/images/I/41hpaAyvK2L._UF894,1000_QL80_.jpg',
         seller: {
           name: 'Sarah Carpenter',
           location: 'Bangalore, Karnataka',

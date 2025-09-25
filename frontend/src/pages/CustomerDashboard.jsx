@@ -1040,7 +1040,7 @@ const CustomerDashboard = () => {
               <div className="flex items-center space-x-4">
                 <h4 className="text-sm font-medium text-gray-900">Price Range:</h4>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-500">$</span>
+                  <span className="text-sm text-gray-500">Rs. </span>
                   <input
                     type="number"
                     placeholder="Min"
@@ -1049,7 +1049,7 @@ const CustomerDashboard = () => {
                     onChange={(e) => setPriceRange({...priceRange, min: e.target.value})}
                   />
                   <span className="text-gray-500">-</span>
-                  <span className="text-sm text-gray-500">$</span>
+                  <span className="text-sm text-gray-500">Rs. </span>
                   <input
                     type="number"
                     placeholder="Max"

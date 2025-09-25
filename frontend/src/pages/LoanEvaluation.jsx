@@ -343,8 +343,8 @@ const LoanEvaluation = () => {
 
               {/* Metrics Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-r from-white-500 to-purple-600 text-white p-6 rounded-lg shadow-lg">
-                  <h4 className="text-sm font-medium opacity-90">Risk Score</h4>
+                <div className="bg-white-800 text-black p-6 rounded-lg shadow-lg border-2">
+                  <h4 className="text-sm font-medium opacity-100">Risk Score</h4>
                   <p className="text-3xl font-bold">{evaluation.risk_score}</p>
                 </div>
 
@@ -355,14 +355,14 @@ const LoanEvaluation = () => {
                   </span>
                 </div>
 
-                <div className={`p-6 rounded-lg shadow-lg ${evaluation.loan_eligibility ? 'bg-green-500' : 'bg-red-500'} text-white`}>
+                <div className={`p-6 rounded-lg shadow-lg ${evaluation.loan_eligibility ? 'bg-white-500' : 'bg-red-500'} text-black border-2`}>
                   <h4 className="text-sm font-medium opacity-90">Loan Eligibility</h4>
                   <p className="text-2xl font-bold">
                     {evaluation.loan_eligibility ? 'Eligible' : 'Not Eligible'}
                   </p>
                 </div>
 
-                <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-lg shadow-lg">
+                <div className="bg-white-500 text-black p-6 rounded-lg shadow-lg border-2">
                   <h4 className="text-sm font-medium opacity-90">Recommended Amount</h4>
                   <p className="text-2xl font-bold">
                     ₹{evaluation.recommended_loan_amount?.toLocaleString() || '0'}
