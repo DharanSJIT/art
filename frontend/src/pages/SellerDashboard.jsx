@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { User, Package, Users, Truck, Plus, Search, Star, MapPin, CreditCard, DollarSign,CheckCircle,AlertCircle,FileText } from 'lucide-react'
+import { User, Package, Users, Truck, Plus, Search, Star, MapPin, CreditCard, DollarSign,CheckCircle,AlertCircle,FileText, ChevronDown } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import LoanEvaluation from './LoanEvaluation'
 import { useAuth } from '../contexts/AuthContext'
+import toast from 'react-hot-toast'
 
 const SellerDashboard = () => {
-  const { currentUser } = useAuth()
+  const { currentUser, logout } = useAuth()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('profile')
+  const [showUserDropdown, setShowUserDropdown] = useState(false)
   const [sellerData, setSellerData] = useState({
     name: currentUser?.displayName || currentUser?.email || 'Seller',
     email: currentUser?.email || '',
@@ -405,6 +409,11 @@ const SellerDashboard = () => {
   ])
 
   const [searchTerm, setSearchTerm] = useState('')
+
+  const handleLogout = async () => {
+    await logout()
+    navigate('/seller/login')
+  }
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -851,10 +860,31 @@ const SellerDashboard = () => {
               <h1 className="text-2xl font-bold text-primary-600">Handmade Nexus - Seller</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome</span>
-              <button className="text-gray-500 hover:text-gray-700">
-                <User className="w-6 h-6" />
-              </button>
+              <div className="relative">
+                <button 
+                  onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                    <User className="w-5 h-5 text-primary-600" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 hidden md:block">
+                    {currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Seller'}
+                  </span>
+                  <ChevronDown className="w-4 h-4 text-gray-400 hidden md:block" />
+                </button>
+
+                {showUserDropdown && (
+                  <div className="absolute right-0 mt-3 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-1">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors rounded-lg font-medium"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -899,6 +929,14 @@ const SellerDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Click outside to close dropdown */}
+      {showUserDropdown && (
+        <div
+          className="fixed inset-0 z-30"
+          onClick={() => setShowUserDropdown(false)}
+        />
+      )}
     </div>
   )
 }
