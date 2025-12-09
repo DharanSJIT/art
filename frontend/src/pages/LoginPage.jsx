@@ -83,9 +83,7 @@ const LoginPage = () => {
               {/* Professional header with refined styling */}
               <div className="mb-12">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-lg rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
-                    <span className="text-2xl text-white">✋</span>
-                  </div>
+                  <img src="/src/assets/logo.png" alt="Handmade Nexus" className="h-16 w-auto" />
                   <div>
                     <h1 className="text-2xl font-semibold tracking-tight text-white">
                       Handmade Nexus
@@ -188,9 +186,7 @@ const LoginPage = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden mb-10">
             <div className="flex items-center space-x-4 mb-6">
-              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                <span className="text-amber-600 text-lg">✋</span>
-              </div>
+              <img src="/src/assets/logo.png" alt="Handmade Nexus" className="h-12 w-auto" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
                   Handmade Nexus
