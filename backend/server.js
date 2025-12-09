@@ -213,10 +213,21 @@ app.get('/api/products', async (req, res) => {
 
 app.post('/api/products', async (req, res) => {
   try {
+    console.log('📦 Creating product:', req.body);
+    
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ 
+        success: false, 
+        message: 'Database not connected. Please check MongoDB connection.' 
+      });
+    }
+    
     const product = new Product(req.body);
     await product.save();
+    console.log('✅ Product created:', product._id);
     res.status(201).json({ success: true, data: { product } });
   } catch (error) {
+    console.error('❌ Product creation error:', error.message);
     res.status(400).json({ success: false, message: error.message });
   }
 });

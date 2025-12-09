@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Upload } from 'lucide-react'
+import { useAuth } from '../contexts/AuthContext'
+import { db } from '../firebase'
+import { doc, setDoc } from 'firebase/firestore'
+import toast from 'react-hot-toast'
 
 const SellerRegistration = () => {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
     email: '',
+    password: '',
+    confirmPassword: '',
     image: null,
     phoneNumber: '',
     alternatePhoneNumber: '',
@@ -21,6 +27,7 @@ const SellerRegistration = () => {
   const [loading, setLoading] = useState(false)
   
   const navigate = useNavigate()
+  const { signup } = useAuth()
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target
@@ -53,6 +60,8 @@ const SellerRegistration = () => {
     if (!formData.name.trim()) newErrors.name = 'Name is required'
     if (!formData.age) newErrors.age = 'Age is required'
     if (!formData.email.trim()) newErrors.email = 'Email is required'
+    if (!formData.password) newErrors.password = 'Password is required'
+    if (!formData.confirmPassword) newErrors.confirmPassword = 'Confirm password is required'
     if (!formData.phoneNumber.trim()) newErrors.phoneNumber = 'Phone number is required'
     if (!formData.address.trim()) newErrors.address = 'Address is required'
     if (!formData.city.trim()) newErrors.city = 'City is required'
@@ -82,6 +91,14 @@ const SellerRegistration = () => {
       newErrors.age = 'Age must be between 18 and 100'
     }
 
+    if (formData.password && formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters'
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match'
+    }
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -96,26 +113,40 @@ const SellerRegistration = () => {
     setLoading(true)
 
     try {
-      // Create FormData for file upload
-      const formDataToSend = new FormData()
-      Object.keys(formData).forEach(key => {
-        if (formData[key] !== null && formData[key] !== '') {
-          formDataToSend.append(key, formData[key])
-        }
-      })
-
-      // Replace with actual API call
-      // const response = await axios.post('/api/seller/register', formDataToSend, {
-      //   headers: { 'Content-Type': 'multipart/form-data' }
-      // })
-
-      // For now, simulate successful registration
-      setTimeout(() => {
-        navigate('/seller/kyc')
-      }, 1000)
+      // Create Firebase user
+      const result = await signup(formData.email, formData.password, formData.name)
       
+      if (result.success) {
+        // Store seller details in Firestore
+        try {
+          await setDoc(doc(db, 'sellers', result.user.uid), {
+            uid: result.user.uid,
+            name: formData.name,
+            age: formData.age,
+            email: formData.email,
+            phoneNumber: formData.phoneNumber,
+            alternatePhoneNumber: formData.alternatePhoneNumber || '',
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode,
+            productType: formData.productType,
+            experience: formData.experience,
+            role: 'seller',
+            createdAt: new Date().toISOString(),
+            verified: false
+          })
+        } catch (firestoreError) {
+          console.warn('Firestore save failed:', firestoreError)
+          toast.error('Account created but profile save failed. Please contact support.')
+        }
+
+        toast.success('Registration successful!')
+        navigate('/seller/dashboard')
+      }
     } catch (error) {
       console.error('Registration failed:', error)
+      toast.error(error.message || 'Registration failed')
     } finally {
       setLoading(false)
     }
@@ -196,6 +227,42 @@ const SellerRegistration = () => {
                 }`}
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                  Password *
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                    errors.password ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                />
+                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                  Confirm Password *
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                    errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                />
+                {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+              </div>
             </div>
 
             <div>

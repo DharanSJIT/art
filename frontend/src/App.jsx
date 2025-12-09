@@ -11,6 +11,7 @@ import SignupPage from './pages/SignupPage'
 import UserTypePage from './pages/UserTypePage'
 import CustomerDashboard from './pages/CustomerDashboard'
 import SellerRegistration from './pages/SellerRegistration'
+import SellerLogin from './pages/SellerLogin'
 import SellerKYC from './pages/SellerKYC'
 import SellerDashboard from './pages/SellerDashboard'
 import ProductDetail from './pages/ProductDetail'
@@ -46,6 +47,7 @@ function App() {
               <Route path="/user-type" element={<UserTypePage />} />
               <Route path="/customer/dashboard" element={<CustomerDashboard />} />
               <Route path="/seller/register" element={<SellerRegistration />} />
+              <Route path="/seller/login" element={<SellerLogin />} />
               <Route path="/seller/kyc" element={<SellerKYC />} />
               <Route path="/seller/dashboard" element={<SellerDashboard />} />
               <Route path="/product/:id" element={<ProductDetail />} />

@@ -9,7 +9,7 @@ const UserTypePage = () => {
     if (type === 'customer') {
       navigate('/login', { state: { userType: 'customer' } })
     } else if (type === 'seller') {
-      navigate('/seller/register')
+      navigate('/seller/login')
     } else if (type === 'intern') {
       navigate('/internships/apply')
     }

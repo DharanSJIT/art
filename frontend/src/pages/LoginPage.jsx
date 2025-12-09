@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { db, auth } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const LoginPage = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -49,7 +51,17 @@ const LoginPage = () => {
         await signup(formData.email, formData.password, formData.name);
         navigate('/user-type');
       } else {
-        await login(formData.email, formData.password);
+        const result = await login(formData.email, formData.password);
+        
+        // Check if user is a seller (should not login as customer)
+        const sellerDoc = await getDoc(doc(db, 'sellers', result.user.uid));
+        
+        if (sellerDoc.exists()) {
+          setError('This is a seller account. Please use seller login.');
+          await auth.signOut();
+          return;
+        }
+        
         navigate("/customer/dashboard");
       }
     } catch (error) {

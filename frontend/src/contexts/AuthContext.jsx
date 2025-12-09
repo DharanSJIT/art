@@ -194,17 +194,6 @@ export const AuthProvider = ({ children }) => {
         displayName: name
       })
 
-      // Optionally sync with your backend
-      try {
-        await axiosInstance.post('/auth/sync-user', {
-          uid: user.uid,
-          email: user.email,
-          name: name
-        })
-      } catch (backendError) {
-        console.warn('Failed to sync with backend:', backendError)
-      }
-
       toast.success('Account created successfully!')
       return { success: true, user }
     } catch (error) {
