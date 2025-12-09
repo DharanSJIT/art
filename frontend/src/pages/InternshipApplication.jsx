@@ -86,7 +86,7 @@ const ApplicationForm = () => {
           
           {/* Left Branding Panel */}
           <div className="md:w-2/5 bg-amber-600 text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: "url('/src/assets/intern.png')" }}></div>
+            <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: "url('/src/assets/intern.png')" }}></div>
             <div className="relative z-10">
               <h2 className="text-3xl font-bold mb-4">Join Our Team</h2>
               <p className="mb-8 opacity-90">
