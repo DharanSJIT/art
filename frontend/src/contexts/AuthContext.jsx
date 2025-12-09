@@ -258,6 +258,10 @@ export const AuthProvider = ({ children }) => {
           background: '#dc2626',
           color: '#fff',
         },
+        iconTheme: {
+          primary: '#dc2626',
+          secondary: '#fff',
+        },
       })
     } catch (error) {
       console.error('Logout error:', error)
