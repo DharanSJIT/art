@@ -55,6 +55,13 @@ const SellerLogin = () => {
     }
   }
 
+const [showPassword, setShowPassword] = useState(false);
+
+const togglePassword = () => {
+  setShowPassword((prev) => !prev);
+};
+
+
   return (
     // Main Container with a slightly darker background for contrast
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 relative">
@@ -93,65 +100,116 @@ const SellerLogin = () => {
 
         {/* RIGHT SIDE: Form Section */}
         <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-          
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-800 uppercase tracking-wide">Seller Login</h1>
+
+      {/* Heading */}
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-extrabold text-gray-800 tracking-wide uppercase">
+          Seller Login
+        </h1>
+        <p className="text-gray-500 text-sm mt-2">Access your seller dashboard</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-7">
+
+        {/* Email Input */}
+        <div className="relative group">
+          <label htmlFor="email" className="sr-only">Email Address</label>
+
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-primary-600 transition-colors" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            
-            {/* Email Input Field with Icon */}
-            <div className="relative">
-                <label htmlFor="email" className="sr-only">Email Address</label>
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Email Address"
-                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                />
-            </div>
-
-            {/* Password Input Field with Icon */}
-            <div className="relative">
-                 <label htmlFor="password" className="sr-only">Password</label>
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Password"
-                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                />
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-6 bg-primary-600 text-white font-semibold rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
-            >
-              {loading ? 'Signing in...' : 'LOGIN'}
-            </button>
-
-            {/* Register Link */}
-            <p className="text-center text-sm text-gray-600 mt-4">
-              Don't have an account?{' '}
-              <Link to="/seller/register" className="text-primary-600 hover:text-primary-700 font-semibold hover:underline transition-all">
-                Register here
-              </Link>
-            </p>
-          </form>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email Address"
+            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-full 
+                       text-gray-700 placeholder-gray-400
+                       focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                       transition-all shadow-sm hover:shadow"
+          />
         </div>
+
+        {/* Password Input with Show/Hide Button */}
+        <div className="relative group">
+          <label htmlFor="password" className="sr-only">Password</label>
+
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-primary-600 transition-colors" />
+          </div>
+
+          <input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-full 
+                       text-gray-700 placeholder-gray-400
+                       focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                       transition-all shadow-sm hover:shadow"
+          />
+
+          {/* Toggle Button */}
+          <button
+            type="button"
+            onClick={togglePassword}
+            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 
+                       hover:text-gray-600 transition-colors focus:outline-none"
+          >
+            {showPassword ? (
+              // Eye Off Icon
+              <svg xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 
+                       0-1.076.178-2.11.507-3.075M6.228 6.228A9.956 9.956 0 0112 5c5.523 0 
+                       10 4.477 10 10 0 1.14-.192 2.234-.546 3.257M4 4l16 16" />
+              </svg>
+            ) : (
+              // Eye Icon
+              <svg xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 
+                       8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 
+                       7-4.478 0-8.268-2.943-9.542-7z" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-3 px-6 bg-primary-600 text-white font-semibold rounded-full 
+                     hover:bg-primary-700 focus:outline-none 
+                     focus:ring-2 focus:ring-offset-2 focus:ring-primary-500
+                     transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          {loading ? "Signing in..." : "LOGIN"}
+        </button>
+
+        {/* Register Link */}
+        <p className="text-center text-sm text-gray-600 mt-2">
+          Don't have an account?{" "}
+          <Link
+            to="/seller/register"
+            className="text-primary-600 hover:text-primary-700 font-semibold hover:underline"
+          >
+            Register here
+          </Link>
+        </p>
+      </form>
+    </div>
+
       </div>
     </div>
   )

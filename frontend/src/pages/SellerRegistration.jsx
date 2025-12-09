@@ -1,182 +1,215 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Upload } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
-import { db } from '../firebase'
-import { doc, setDoc } from 'firebase/firestore'
-import toast from 'react-hot-toast'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, Upload } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 const SellerRegistration = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    age: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    age: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
     image: null,
-    phoneNumber: '',
-    alternatePhoneNumber: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: '',
-    productType: '',
-    experience: ''
-  })
-  const [errors, setErrors] = useState({})
-  const [loading, setLoading] = useState(false)
-  
-  const navigate = useNavigate()
-  const { signup } = useAuth()
+    phoneNumber: "",
+    alternatePhoneNumber: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    productType: "",
+    experience: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const { signup } = useAuth();
 
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target
-    
-    if (type === 'file') {
+    const { name, value, type, files } = e.target;
+
+    if (type === "file") {
       setFormData({
         ...formData,
-        [name]: files[0]
-      })
+        [name]: files[0],
+      });
     } else {
       setFormData({
         ...formData,
-        [name]: value
-      })
+        [name]: value,
+      });
     }
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors({
         ...errors,
-        [name]: ''
-      })
+        [name]: "",
+      });
     }
-  }
+  };
 
   const validateForm = () => {
-    const newErrors = {}
+    const newErrors = {};
 
     // Required fields validation
-    if (!formData.name.trim()) newErrors.name = 'Name is required'
-    if (!formData.age) newErrors.age = 'Age is required'
-    if (!formData.email.trim()) newErrors.email = 'Email is required'
-    if (!formData.password) newErrors.password = 'Password is required'
-    if (!formData.confirmPassword) newErrors.confirmPassword = 'Confirm password is required'
-    if (!formData.phoneNumber.trim()) newErrors.phoneNumber = 'Phone number is required'
-    if (!formData.address.trim()) newErrors.address = 'Address is required'
-    if (!formData.city.trim()) newErrors.city = 'City is required'
-    if (!formData.state.trim()) newErrors.state = 'State is required'
-    if (!formData.pincode.trim()) newErrors.pincode = 'Pincode is required'
-    if (!formData.productType.trim()) newErrors.productType = 'Product type is required'
-    if (!formData.experience.trim()) newErrors.experience = 'Experience is required'
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.age) newErrors.age = "Age is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    if (!formData.password) newErrors.password = "Password is required";
+    if (!formData.confirmPassword)
+      newErrors.confirmPassword = "Confirm password is required";
+    if (!formData.phoneNumber.trim())
+      newErrors.phoneNumber = "Phone number is required";
+    if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (!formData.city.trim()) newErrors.city = "City is required";
+    if (!formData.state.trim()) newErrors.state = "State is required";
+    if (!formData.pincode.trim()) newErrors.pincode = "Pincode is required";
+    if (!formData.productType.trim())
+      newErrors.productType = "Product type is required";
+    if (!formData.experience.trim())
+      newErrors.experience = "Experience is required";
 
     // Format validation
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email'
+      newErrors.email = "Please enter a valid email";
     }
-    
+
     if (formData.phoneNumber && !/^\d{10}$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = 'Phone number must be 10 digits'
+      newErrors.phoneNumber = "Phone number must be 10 digits";
     }
-    
-    if (formData.alternatePhoneNumber && !/^\d{10}$/.test(formData.alternatePhoneNumber)) {
-      newErrors.alternatePhoneNumber = 'Alternate phone number must be 10 digits'
+
+    if (
+      formData.alternatePhoneNumber &&
+      !/^\d{10}$/.test(formData.alternatePhoneNumber)
+    ) {
+      newErrors.alternatePhoneNumber =
+        "Alternate phone number must be 10 digits";
     }
-    
+
     if (formData.pincode && !/^\d{6}$/.test(formData.pincode)) {
-      newErrors.pincode = 'Pincode must be 6 digits'
+      newErrors.pincode = "Pincode must be 6 digits";
     }
-    
+
     if (formData.age && (formData.age < 18 || formData.age > 100)) {
-      newErrors.age = 'Age must be between 18 and 100'
+      newErrors.age = "Age must be between 18 and 100";
     }
 
     if (formData.password && formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters'
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match'
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!validateForm()) {
-      return
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
       // Create Firebase user
-      const result = await signup(formData.email, formData.password, formData.name)
-      
+      const result = await signup(
+        formData.email,
+        formData.password,
+        formData.name
+      );
+
       if (result.success) {
         // Store seller details in Firestore
         try {
-          await setDoc(doc(db, 'sellers', result.user.uid), {
+          await setDoc(doc(db, "sellers", result.user.uid), {
             uid: result.user.uid,
             name: formData.name,
             age: formData.age,
             email: formData.email,
             phoneNumber: formData.phoneNumber,
-            alternatePhoneNumber: formData.alternatePhoneNumber || '',
+            alternatePhoneNumber: formData.alternatePhoneNumber || "",
             address: formData.address,
             city: formData.city,
             state: formData.state,
             pincode: formData.pincode,
             productType: formData.productType,
             experience: formData.experience,
-            role: 'seller',
+            role: "seller",
             createdAt: new Date().toISOString(),
-            verified: false
-          })
+            verified: false,
+          });
         } catch (firestoreError) {
-          console.warn('Firestore save failed:', firestoreError)
-          toast.error('Account created but profile save failed. Please contact support.')
+          console.warn("Firestore save failed:", firestoreError);
+          toast.error(
+            "Account created but profile save failed. Please contact support."
+          );
         }
 
-        toast.success('Registration successful!')
-        navigate('/seller/dashboard')
+        toast.success("Registration successful!");
+        navigate("/seller/dashboard");
       }
     } catch (error) {
-      console.error('Registration failed:', error)
-      toast.error(error.message || 'Registration failed')
+      console.error("Registration failed:", error);
+      toast.error(error.message || "Registration failed");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <div className="mb-8">
-          <button
+          {/* <button
             onClick={() => navigate('/user-type')}
             className="flex items-center text-primary-600 hover:text-primary-700 mb-4"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back
+          </button> */}
+          <button
+            onClick={() => navigate("/user-type")}
+            className="absolute top-[2vh] text-xl left-[2vw] flex items-center text-primary-500 hover:text-primary-600 hover:transition-colors hover:underline z-50  p-4 rounded-full"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to user
           </button>
-          
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Seller Registration</h1>
-          <p className="text-gray-600">Please fill in your details to start selling on Handmade Nexus</p>
+
+          <h1 className="text-3xl font-bold text-gray-900 mb-2 pt-4">
+            Seller Registration
+          </h1>
+          <p className="text-gray-600">
+            Please fill in your details to start selling on Handmade Nexus
+          </p>
           <p className="text-sm text-gray-500 mt-2">* Required fields</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow rounded-lg p-6 space-y-6"
+        >
           {/* Basic Information */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">Basic Information</h2>
-            
+            <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">
+              Basic Information
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Full Name *
                 </label>
                 <input
@@ -186,14 +219,19 @@ const SellerRegistration = () => {
                   value={formData.name}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.name ? 'border-red-500' : 'border-gray-300'
+                    errors.name ? "border-red-500" : "border-gray-300"
                   }`}
                 />
-                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="age"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Age *
                 </label>
                 <input
@@ -205,15 +243,20 @@ const SellerRegistration = () => {
                   value={formData.age}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.age ? 'border-red-500' : 'border-gray-300'
+                    errors.age ? "border-red-500" : "border-gray-300"
                   }`}
                 />
-                {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
+                {errors.age && (
+                  <p className="text-red-500 text-sm mt-1">{errors.age}</p>
+                )}
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email Address *
               </label>
               <input
@@ -223,15 +266,20 @@ const SellerRegistration = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
+                  errors.email ? "border-red-500" : "border-gray-300"
                 }`}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Password *
                 </label>
                 <input
@@ -241,14 +289,19 @@ const SellerRegistration = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.password ? 'border-red-500' : 'border-gray-300'
+                    errors.password ? "border-red-500" : "border-gray-300"
                   }`}
                 />
-                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Confirm Password *
                 </label>
                 <input
@@ -258,46 +311,71 @@ const SellerRegistration = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                    errors.confirmPassword
+                      ? "border-red-500"
+                      : "border-gray-300"
                   }`}
                 />
-                {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.confirmPassword}
+                  </p>
+                )}
               </div>
             </div>
 
             <div>
-              <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="image"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Profile Image
               </label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-primary-400 transition-colors">
                 <div className="space-y-1 text-center">
-                                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
                   <div className="flex text-sm text-gray-600">
                     <label
                       htmlFor="image"
                       className="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
                     >
                       <span>Upload a file</span>
-                      <input id="image" name="image" type="file" className="sr-only" onChange={handleChange} accept="image/*" />
+                      <input
+                        id="image"
+                        name="image"
+                        type="file"
+                        className="sr-only"
+                        onChange={handleChange}
+                        accept="image/*"
+                      />
                     </label>
                     <p className="pl-1">or drag and drop</p>
                   </div>
-                  <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
                 </div>
               </div>
               {formData.image && (
-                <p className="text-sm text-gray-600 mt-2">Selected: {formData.image.name}</p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Selected: {formData.image.name}
+                </p>
               )}
             </div>
           </div>
 
           {/* Contact Information */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">Contact Information</h2>
-            
+            <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">
+              Contact Information
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="phoneNumber"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Phone Number *
                 </label>
                 <input
@@ -308,14 +386,21 @@ const SellerRegistration = () => {
                   onChange={handleChange}
                   placeholder="10-digit phone number"
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.phoneNumber ? 'border-red-500' : 'border-gray-300'
+                    errors.phoneNumber ? "border-red-500" : "border-gray-300"
                   }`}
                 />
-                {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
+                {errors.phoneNumber && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.phoneNumber}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="alternatePhoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="alternatePhoneNumber"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Alternate Phone Number
                 </label>
                 <input
@@ -326,20 +411,31 @@ const SellerRegistration = () => {
                   onChange={handleChange}
                   placeholder="10-digit phone number"
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.alternatePhoneNumber ? 'border-red-500' : 'border-gray-300'
+                    errors.alternatePhoneNumber
+                      ? "border-red-500"
+                      : "border-gray-300"
                   }`}
                 />
-                {errors.alternatePhoneNumber && <p className="text-red-500 text-sm mt-1">{errors.alternatePhoneNumber}</p>}
+                {errors.alternatePhoneNumber && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.alternatePhoneNumber}
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
           {/* Address Information */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">Address Information</h2>
-            
+            <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">
+              Address Information
+            </h2>
+
             <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Address *
               </label>
               <textarea
@@ -349,15 +445,20 @@ const SellerRegistration = () => {
                 value={formData.address}
                 onChange={handleChange}
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                  errors.address ? 'border-red-500' : 'border-gray-300'
+                  errors.address ? "border-red-500" : "border-gray-300"
                 }`}
               />
-              {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+              {errors.address && (
+                <p className="text-red-500 text-sm mt-1">{errors.address}</p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   City *
                 </label>
                 <input
@@ -367,14 +468,19 @@ const SellerRegistration = () => {
                   value={formData.city}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.city ? 'border-red-500' : 'border-gray-300'
+                    errors.city ? "border-red-500" : "border-gray-300"
                   }`}
                 />
-                {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
+                {errors.city && (
+                  <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="state"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   State *
                 </label>
                 <input
@@ -384,14 +490,19 @@ const SellerRegistration = () => {
                   value={formData.state}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.state ? 'border-red-500' : 'border-gray-300'
+                    errors.state ? "border-red-500" : "border-gray-300"
                   }`}
                 />
-                {errors.state && <p className="text-red-500 text-sm mt-1">{errors.state}</p>}
+                {errors.state && (
+                  <p className="text-red-500 text-sm mt-1">{errors.state}</p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="pincode"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Pincode *
                 </label>
                 <input
@@ -402,20 +513,27 @@ const SellerRegistration = () => {
                   onChange={handleChange}
                   placeholder="6-digit pincode"
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                    errors.pincode ? 'border-red-500' : 'border-gray-300'
+                    errors.pincode ? "border-red-500" : "border-gray-300"
                   }`}
                 />
-                {errors.pincode && <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>}
+                {errors.pincode && (
+                  <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>
+                )}
               </div>
             </div>
           </div>
 
           {/* Business Information */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">Business Information</h2>
-            
+            <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">
+              Business Information
+            </h2>
+
             <div>
-              <label htmlFor="productType" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="productType"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Type of Products You Sell *
               </label>
               <input
@@ -426,14 +544,21 @@ const SellerRegistration = () => {
                 onChange={handleChange}
                 placeholder="e.g., Pottery, Woodwork, Textiles, Jewelry"
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                  errors.productType ? 'border-red-500' : 'border-gray-300'
+                  errors.productType ? "border-red-500" : "border-gray-300"
                 }`}
               />
-              {errors.productType && <p className="text-red-500 text-sm mt-1">{errors.productType}</p>}
+              {errors.productType && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.productType}
+                </p>
+              )}
             </div>
 
             <div>
-              <label htmlFor="experience" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="experience"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Years of Experience *
               </label>
               <select
@@ -442,7 +567,7 @@ const SellerRegistration = () => {
                 value={formData.experience}
                 onChange={handleChange}
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                  errors.experience ? 'border-red-500' : 'border-gray-300'
+                  errors.experience ? "border-red-500" : "border-gray-300"
                 }`}
               >
                 <option value="">Select experience level</option>
@@ -452,7 +577,9 @@ const SellerRegistration = () => {
                 <option value="6-10">6-10 years</option>
                 <option value="more-than-10">More than 10 years</option>
               </select>
-              {errors.experience && <p className="text-red-500 text-sm mt-1">{errors.experience}</p>}
+              {errors.experience && (
+                <p className="text-red-500 text-sm mt-1">{errors.experience}</p>
+              )}
             </div>
           </div>
 
@@ -460,7 +587,7 @@ const SellerRegistration = () => {
           <div className="flex justify-end space-x-4 pt-6 border-t">
             <button
               type="button"
-              onClick={() => navigate('/user-type')}
+              onClick={() => navigate("/user-type")}
               className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
             >
               Cancel
@@ -470,13 +597,13 @@ const SellerRegistration = () => {
               disabled={loading}
               className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Submitting...' : 'Continue to KYC'}
+              {loading ? "Submitting..." : "Continue to KYC"}
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SellerRegistration
+export default SellerRegistration;
