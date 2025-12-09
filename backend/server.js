@@ -2,8 +2,22 @@ const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
 const axios = require('axios')
+const mongoose = require('mongoose')
+const Product = require('./src/models/Product')
 const app = express()
-const PORT = process.env.PORT || 5001; // Fixed: Actually use 5001
+const PORT = process.env.PORT || 5001;
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch(err => {
+    console.error('❌ MongoDB connection failed:', err.message);
+    console.log('⚠️ Server will continue without MongoDB');
+  });
+
+mongoose.connection.on('error', err => {
+  console.error('❌ MongoDB runtime error:', err.message);
+});
 
 // -----------------------------
 // CORS Middleware (FIXED)
@@ -177,38 +191,47 @@ app.get('/api/loan/health', (req, res) => {
 })
 
 // Products API
-app.get('/api/products', (req, res) => {
-  console.log('Products API called')
-  res.json({
-    success: true,
-    data: {
-      products: mockProducts,
-      pagination: {
-        page: 1,
-        limit: 12,
-        total: mockProducts.length,
-        totalPages: 1
+app.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.json({
+      success: true,
+      data: {
+        products,
+        pagination: {
+          page: 1,
+          limit: 12,
+          total: products.length,
+          totalPages: 1
+        }
       }
-    }
-  })
-})
-
-app.get('/api/products/:id', (req, res) => {
-  const { id } = req.params
-  const product = mockProducts.find(p => p.id === parseInt(id))
-  
-  if (!product) {
-    return res.status(404).json({
-      success: false,
-      message: 'Product not found'
-    })
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
-  
-  res.json({
-    success: true,
-    data: { product }
-  })
-})
+});
+
+app.post('/api/products', async (req, res) => {
+  try {
+    const product = new Product(req.body);
+    await product.save();
+    res.status(201).json({ success: true, data: { product } });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+app.get('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+    res.json({ success: true, data: { product } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 // Import auth routes (make sure this file exists)
 try {

@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { User, Package, Users, Truck, Plus, Search, Star, MapPin, CreditCard, DollarSign,CheckCircle,AlertCircle,FileText } from 'lucide-react'
 import LoanEvaluation from './LoanEvaluation'
+import { useAuth } from '../contexts/AuthContext'
 
 const SellerDashboard = () => {
+  const { currentUser } = useAuth()
   const [activeTab, setActiveTab] = useState('profile')
   const [sellerData, setSellerData] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
+    name: currentUser?.displayName || currentUser?.email || 'Seller',
+    email: currentUser?.email || '',
     phone: '+91 9876543210',
-    address: '123 Main Street, Chennai, Tamil Nadu 600001',
+    address: 'Chennai, Tamil Nadu',
     productType: 'Pottery',
     experience: '5+ years',
     rating: 4.7,
-    totalOrders: 156,
-    completedOrders: 142
+    totalOrders: 0,
+    completedOrders: 0
   })
+
+  useEffect(() => {
+    if (currentUser) {
+      setSellerData(prev => ({
+        ...prev,
+        name: currentUser.displayName || currentUser.email || 'Seller',
+        email: currentUser.email || ''
+      }))
+    }
+  }, [currentUser])
   const [loanData, setLoanData] = useState({
     currentLoans: [
       {
@@ -712,14 +724,120 @@ const SellerDashboard = () => {
     </div>
   )
 
+  const ProductsTab = () => {
+    const [productForm, setProductForm] = useState({
+      name: '',
+      price: '',
+      originalPrice: '',
+      image: '',
+      category: '',
+      description: '',
+      stockCount: '',
+      deliveryTime: ''
+    });
+
+    const handleProductSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...productForm,
+            price: parseFloat(productForm.price),
+            originalPrice: parseFloat(productForm.originalPrice),
+            stockCount: parseInt(productForm.stockCount),
+            seller: {
+              id: 'seller1',
+              name: sellerData.name,
+              location: sellerData.address,
+              rating: sellerData.rating,
+              verified: true
+            },
+            rating: 4.5,
+            reviewCount: 0,
+            inStock: true,
+            isPopular: false,
+            isFeatured: false,
+            discount: Math.round(((productForm.originalPrice - productForm.price) / productForm.originalPrice) * 100),
+            tags: [productForm.category],
+            shippingCost: 0,
+            freeShipping: true
+          })
+        });
+        const data = await response.json();
+        if (data.success) {
+          alert('Product uploaded successfully!');
+          setProductForm({ name: '', price: '', originalPrice: '', image: '', category: '', description: '', stockCount: '', deliveryTime: '' });
+        }
+      } catch (error) {
+        alert('Failed to upload product');
+      }
+    };
+
+    return (
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Upload New Product</h2>
+        <form onSubmit={handleProductSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+              <input type="text" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.name} onChange={(e) => setProductForm({...productForm, name: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <select required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.category} onChange={(e) => setProductForm({...productForm, category: e.target.value})}>
+                <option value="">Select category</option>
+                <option value="pottery">Pottery</option>
+                <option value="woodwork">Woodwork</option>
+                <option value="textiles">Textiles</option>
+                <option value="jewelry">Jewelry</option>
+                <option value="metalwork">Metalwork</option>
+                <option value="leather">Leather</option>
+                <option value="painting">Painting</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+              <input type="number" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.price} onChange={(e) => setProductForm({...productForm, price: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Original Price (₹)</label>
+              <input type="number" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.originalPrice} onChange={(e) => setProductForm({...productForm, originalPrice: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Stock Count</label>
+              <input type="number" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.stockCount} onChange={(e) => setProductForm({...productForm, stockCount: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Time</label>
+              <input type="text" required placeholder="e.g., 5-7 days" className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.deliveryTime} onChange={(e) => setProductForm({...productForm, deliveryTime: e.target.value})} />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+            <input type="url" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.image} onChange={(e) => setProductForm({...productForm, image: e.target.value})} />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea required rows="4" className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.description} onChange={(e) => setProductForm({...productForm, description: e.target.value})} />
+          </div>
+          <button type="submit" className="w-full bg-primary-600 text-white py-3 px-4 rounded-md hover:bg-primary-700 font-medium">
+            Upload Product
+          </button>
+        </form>
+      </div>
+    );
+  };
+
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
+    { id: 'products', label: 'Products', icon: Package },
     { id: 'orders', label: 'Orders', icon: Package },
     { id: 'collaboration', label: 'Collaboration Hub', icon: Users },
     { id: 'supply', label: 'Supply', icon: Truck },
     { id: 'loan', label: 'Loans', icon: CreditCard },
     { id: 'loaneval', label: 'Loans Evaluation', icon: CreditCard }
-
   ]
 
   return (
@@ -769,6 +887,7 @@ const SellerDashboard = () => {
           {/* Main Content */}
           <div className="flex-1">
             {activeTab === 'profile' && <ProfileTab />}
+            {activeTab === 'products' && <ProductsTab />}
             {activeTab === 'orders' && <OrdersTab />}
             {activeTab === 'collaboration' && <CollaborationTab />}
             {activeTab === 'supply' && <SupplyTab />}

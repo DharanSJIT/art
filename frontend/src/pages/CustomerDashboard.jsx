@@ -74,22 +74,15 @@ const CustomerDashboard = () => {
     try {
       setLoading(true)
       
-      // Try to fetch from API first
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URLl || 'http://localhost:5000/apii'}/products`)
-        if (response.ok) {
-          const data = await response.json()
-          if (data.success && data.data.products) {
-            setProducts(data.data.products)
-            setLoading(false)
-            return
-          }
-        }
-      } catch (apiError) {
-        console.log('API not available, using mock data')
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products`)
+      const data = await response.json()
+      if (data.success && data.data.products) {
+        setProducts(data.data.products)
+        setLoading(false)
+        return
       }
-      
-      // Fallback to comprehensive mock data
+    } catch (apiError) {
+      console.error('Failed to fetch products:', apiError)
       setTimeout(() => {
         const mockProducts = [
           {
@@ -410,9 +403,6 @@ const CustomerDashboard = () => {
         setProducts(mockProducts)
         setLoading(false)
       }, 1500)
-    } catch (error) {
-      toast.error('Failed to load products')
-      setLoading(false)
     }
   }
 
