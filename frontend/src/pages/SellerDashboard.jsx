@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { User, Package, Users, Truck, Plus, Search, Star, MapPin, CreditCard, DollarSign,CheckCircle,AlertCircle,FileText, ChevronDown } from 'lucide-react'
+import { User, Package, Users, Truck, Plus, Search, Star, MapPin, CreditCard, DollarSign, CheckCircle, AlertCircle, FileText, ChevronDown, TrendingUp, ShoppingBag, Clock, Edit, Trash2, Eye, Bell, Settings, BarChart3, Calendar } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import LoanEvaluation from './LoanEvaluation'
 import { useAuth } from '../contexts/AuthContext'
@@ -430,63 +430,86 @@ const SellerDashboard = () => {
 
   const ProfileTab = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center">
-            <User className="w-10 h-10 text-primary-600" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">{sellerData.name}</h2>
-            <p className="text-gray-600">{sellerData.productType} Specialist</p>
-            <div className="flex items-center mt-1">
-              <Star className="w-4 h-4 text-yellow-400 fill-current" />
-              <span className="text-sm text-gray-600 ml-1">{sellerData.rating}/5</span>
-              <span className="text-sm text-gray-400 ml-2">({sellerData.totalOrders} orders)</span>
+      {/* Profile Header Card */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-orange-50 h-32"></div>
+        <div className="px-8 pb-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between -mt-16">
+            <div className="flex items-end space-x-5">
+              <div className="w-32 h-32 bg-white rounded-2xl border-4 border-white shadow-lg flex items-center justify-center">
+                <User className="w-16 h-16 text-orange-600" />
+              </div>
+              <div className="pb-2">
+                <h2 className="text-3xl font-bold text-gray-900">{sellerData.name}</h2>
+                <p className="text-gray-600 mt-1">{sellerData.productType} Specialist</p>
+                <div className="flex items-center mt-2 space-x-4">
+                  <div className="flex items-center">
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                    <span className="text-sm font-semibold text-gray-700 ml-1">{sellerData.rating}/5</span>
+                  </div>
+                  <span className="text-sm text-gray-400">•</span>
+                  <span className="text-sm text-gray-600">{sellerData.totalOrders} orders</span>
+                  <span className="text-sm text-gray-400">•</span>
+                  <span className="text-sm text-gray-600">{sellerData.experience}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <h3 className="font-semibold text-blue-900">Total Orders</h3>
-            <p className="text-2xl font-bold text-blue-600">{sellerData.totalOrders}</p>
+      {/* Business Info Card */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <h3 className="text-xl font-bold text-gray-900 mb-6">Business Information</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">Email Address</label>
+            <p className="text-gray-900 text-lg">{sellerData.email}</p>
           </div>
-          <div className="bg-green-50 p-4 rounded-lg">
-            <h3 className="font-semibold text-green-900">Completed</h3>
-            <p className="text-2xl font-bold text-green-600">{sellerData.completedOrders}</p>
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">Phone Number</label>
+            <p className="text-gray-900 text-lg">{sellerData.phone}</p>
           </div>
-          <div className="bg-purple-50 p-4 rounded-lg">
-            <h3 className="font-semibold text-purple-900">Success Rate</h3>
-            <p className="text-2xl font-bold text-purple-600">
-              {Math.round((sellerData.completedOrders / sellerData.totalOrders) * 100)}%
-            </p>
+          <div className="space-y-1 md:col-span-2">
+            <label className="block text-sm font-semibold text-gray-500">Business Address</label>
+            <p className="text-gray-900 text-lg">{sellerData.address}</p>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">Specialization</label>
+            <p className="text-gray-900 text-lg">{sellerData.productType}</p>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">Experience</label>
+            <p className="text-gray-900 text-lg">{sellerData.experience}</p>
           </div>
         </div>
+      </div>
 
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Contact Information</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <p className="text-gray-900">{sellerData.email}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Phone</label>
-              <p className="text-gray-900">{sellerData.phone}</p>
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Address</label>
-              <p className="text-gray-900">{sellerData.address}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Specialization</label>
-              <p className="text-gray-900">{sellerData.productType}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Experience</label>
-              <p className="text-gray-900">{sellerData.experience}</p>
-            </div>
+      {/* Performance Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-sm font-semibold text-gray-500">Total Orders</h4>
+            <Package className="w-5 h-5 text-blue-600" />
           </div>
+          <p className="text-4xl font-bold text-gray-900">{sellerData.totalOrders}</p>
+          <p className="text-sm text-gray-500 mt-2">All time orders</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-sm font-semibold text-gray-500">Completed</h4>
+            <CheckCircle className="w-5 h-5 text-green-600" />
+          </div>
+          <p className="text-4xl font-bold text-gray-900">{sellerData.completedOrders}</p>
+          <p className="text-sm text-gray-500 mt-2">Successfully delivered</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-sm font-semibold text-gray-500">Success Rate</h4>
+            <TrendingUp className="w-5 h-5 text-purple-600" />
+          </div>
+          <p className="text-4xl font-bold text-gray-900">{Math.round((sellerData.completedOrders / sellerData.totalOrders) * 100) || 0}%</p>
+          <p className="text-sm text-gray-500 mt-2">Order completion rate</p>
         </div>
       </div>
     </div>
@@ -557,60 +580,67 @@ const SellerDashboard = () => {
 
   const OrdersTab = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow">
+      {/* Order Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <p className="text-sm text-gray-500 mb-2">Total Orders</p>
+          <p className="text-3xl font-bold text-gray-900">{orders.length}</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <p className="text-sm text-gray-500 mb-2">Pending</p>
+          <p className="text-3xl font-bold text-yellow-600">{orders.filter(o => o.status === 'pending').length}</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <p className="text-sm text-gray-500 mb-2">Completed</p>
+          <p className="text-3xl font-bold text-green-600">{orders.filter(o => o.status === 'completed').length}</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <p className="text-sm text-gray-500 mb-2">Revenue</p>
+          <p className="text-3xl font-bold text-orange-600">₹{orders.reduce((sum, o) => sum + o.amount, 0).toFixed(2)}</p>
+        </div>
+      </div>
+
+      {/* Orders List */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Order Management</h2>
+          <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Order ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Customer
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Product
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Order ID</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Customer</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Product</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Amount</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Date</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Action</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200">
               {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {order.id}
+                <tr key={order.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 text-sm font-bold text-gray-900">{order.id}</td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm font-semibold text-gray-900">{order.customerName}</div>
+                    <div className="text-xs text-gray-500">{order.deliveryAddress}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">{order.customerName}</div>
-                      <div className="text-sm text-gray-500">{order.deliveryAddress}</div>
-                    </div>
+                  <td className="px-6 py-4">
+                    <div className="text-sm font-medium text-gray-900">{order.product}</div>
+                    <div className="text-xs text-gray-500">Qty: {order.quantity}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{order.product}</div>
-                    <div className="text-sm text-gray-500">Qty: {order.quantity}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${order.amount}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                  <td className="px-6 py-4 text-sm font-bold text-gray-900">₹{order.amount}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex px-3 py-1 text-xs font-bold rounded-full ${getStatusColor(order.status)}`}>
                       {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.orderDate}
+                  <td className="px-6 py-4 text-sm text-gray-600">{order.orderDate}</td>
+                  <td className="px-6 py-4">
+                    <button className="text-orange-600 hover:text-orange-700 font-medium text-sm">
+                      <Eye className="w-5 h-5" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -623,52 +653,44 @@ const SellerDashboard = () => {
 
   const CollaborationTab = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Find Collaborators</h2>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Find Collaborators</h2>
+            <p className="text-sm text-gray-500 mt-1">Connect with skilled artisans</p>
+          </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Search by skill..."
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input type="text" placeholder="Search by skill..." className="pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent w-full md:w-80" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {collaborators
-            .filter(collab => collab.skill.toLowerCase().includes(searchTerm.toLowerCase()))
-            .map((collaborator) => (
-            <div key={collaborator.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-              <div className="flex items-center space-x-3 mb-3">
-                <img
-                  src={collaborator.image}
-                  alt={collaborator.name}
-                  className="w-12 h-12 rounded-full"
-                />
+          {collaborators.filter(collab => collab.skill.toLowerCase().includes(searchTerm.toLowerCase())).map((collaborator) => (
+            <div key={collaborator.id} className="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all hover:border-orange-300">
+              <div className="flex items-center space-x-4 mb-4">
+                <img src={collaborator.image} alt={collaborator.name} className="w-16 h-16 rounded-full border-2 border-orange-200" />
                 <div>
-                  <h3 className="font-semibold text-gray-900">{collaborator.name}</h3>
-                  <p className="text-sm text-primary-600">{collaborator.skill}</p>
+                  <h3 className="font-bold text-gray-900 text-lg">{collaborator.name}</h3>
+                  <p className="text-sm text-orange-600 font-medium">{collaborator.skill}</p>
                 </div>
               </div>
-              
-              <div className="space-y-2 text-sm text-gray-600 mb-4">
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 mr-1" />
+              <div className="space-y-3 mb-4">
+                <div className="flex items-center text-sm text-gray-600">
+                  <MapPin className="w-4 h-4 mr-2 text-gray-400" />
                   {collaborator.location}
                 </div>
-                <div className="flex items-center">
-                  <Star className="w-4 h-4 mr-1 text-yellow-400 fill-current" />
-                  {collaborator.rating}/5
+                <div className="flex items-center text-sm text-gray-600">
+                  <Star className="w-4 h-4 mr-2 text-yellow-400 fill-current" />
+                  {collaborator.rating}/5 Rating
                 </div>
-                <div>Experience: {collaborator.experience}</div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Clock className="w-4 h-4 mr-2 text-gray-400" />
+                  {collaborator.experience}
+                </div>
               </div>
-              
-              <button className="w-full py-2 px-4 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-sm">
-                Connect
+              <button className="w-full py-3 px-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold">
+                Connect Now
               </button>
             </div>
           ))}
@@ -679,52 +701,60 @@ const SellerDashboard = () => {
 
   const SupplyTab = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Raw Material Suppliers</h2>
-          <button className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-            <Plus className="w-4 h-4 mr-2" />
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Raw Material Suppliers</h2>
+            <p className="text-sm text-gray-500 mt-1">Find quality materials for your craft</p>
+          </div>
+          <button className="flex items-center justify-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold">
+            <Plus className="w-5 h-5 mr-2" />
             Request Quote
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {suppliers.map((supplier) => (
-            <div key={supplier.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h3 className="font-semibold text-gray-900 text-lg">{supplier.name}</h3>
-                  <div className="flex items-center mt-1">
-                    <MapPin className="w-4 h-4 text-gray-400 mr-1" />
-                    <span className="text-sm text-gray-600">{supplier.location}</span>
-                  </div>
-                  <div className="flex items-center mt-1">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                    <span className="text-sm text-gray-600">{supplier.rating}/5</span>
+            <div key={supplier.id} className="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all hover:border-orange-300">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+                <div className="flex-1">
+                  <h3 className="font-bold text-gray-900 text-xl mb-2">{supplier.name}</h3>
+                  <div className="flex flex-wrap items-center gap-4 text-sm">
+                    <div className="flex items-center text-gray-600">
+                      <MapPin className="w-4 h-4 text-gray-400 mr-2" />
+                      {supplier.location}
+                    </div>
+                    <div className="flex items-center text-gray-600">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current mr-2" />
+                      {supplier.rating}/5 Rating
+                    </div>
                   </div>
                 </div>
-                <button className="px-4 py-2 border border-primary-600 text-primary-600 rounded-md hover:bg-primary-50 transition-colors">
-                  Contact
+                <button className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold whitespace-nowrap">
+                  Contact Supplier
                 </button>
               </div>
               
-              <div className="mb-3">
-                <h4 className="font-medium text-gray-700 mb-2">Available Materials:</h4>
+              <div className="mb-4">
+                <h4 className="font-semibold text-gray-700 mb-3">Available Materials</h4>
                 <div className="flex flex-wrap gap-2">
                   {supplier.materials.map((material, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
-                    >
+                    <span key={index} className="px-4 py-2 bg-orange-50 text-orange-700 text-sm rounded-lg font-medium border border-orange-200">
                       {material}
                     </span>
                   ))}
                 </div>
               </div>
               
-              <div className="flex justify-between items-center text-sm text-gray-600">
-                <span>Min Order: ₹{supplier.minOrder}</span>
-                <span>Phone: {supplier.contact}</span>
+              <div className="flex flex-wrap gap-6 text-sm">
+                <div>
+                  <span className="text-gray-500">Min Order:</span>
+                  <span className="font-bold text-gray-900 ml-2">₹{supplier.minOrder}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Contact:</span>
+                  <span className="font-bold text-gray-900 ml-2">{supplier.contact}</span>
+                </div>
               </div>
             </div>
           ))}
@@ -733,8 +763,9 @@ const SellerDashboard = () => {
     </div>
   )
 
+  const [myProducts, setMyProducts] = useState([]);
+
   const ProductsTab = () => {
-    const [myProducts, setMyProducts] = useState([]);
     const [editingProduct, setEditingProduct] = useState(null);
     const [productForm, setProductForm] = useState({
       name: '',
@@ -848,89 +879,152 @@ const SellerDashboard = () => {
 
     return (
       <div className="space-y-6">
-        {/* My Products List */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">My Products ({myProducts.length})</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {myProducts.map((product) => (
-              <div key={product._id} className="border rounded-lg p-4">
-                <img src={product.image} alt={product.name} className="w-full h-40 object-cover rounded mb-3" />
-                <h3 className="font-semibold text-gray-900 mb-1">{product.name}</h3>
-                <p className="text-sm text-gray-600 mb-2">₹{product.price}</p>
-                <p className={`text-sm mb-3 ${product.stockCount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  Stock: {product.stockCount} {product.stockCount > 0 ? '(In Stock)' : '(Out of Stock)'}
-                </p>
-                <div className="flex gap-2">
-                  <button onClick={() => handleEdit(product)} className="flex-1 px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDelete(product._id)} className="flex-1 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">
-                    Delete
-                  </button>
-                </div>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Total Products</p>
+                <h3 className="text-3xl font-bold text-gray-900">{myProducts.length}</h3>
               </div>
-            ))}
+              <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center">
+                <Package className="w-7 h-7 text-orange-600" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">In Stock</p>
+                <h3 className="text-3xl font-bold text-green-600">{myProducts.filter(p => p.stockCount > 0).length}</h3>
+              </div>
+              <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                <CheckCircle className="w-7 h-7 text-green-600" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Out of Stock</p>
+                <h3 className="text-3xl font-bold text-red-600">{myProducts.filter(p => p.stockCount === 0).length}</h3>
+              </div>
+              <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center">
+                <AlertCircle className="w-7 h-7 text-red-600" />
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Product Form */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">{editingProduct ? 'Edit Product' : 'Upload New Product'}</h2>
-        <form onSubmit={handleProductSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-              <input type="text" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.name} onChange={(e) => setProductForm({...productForm, name: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-              <select required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.category} onChange={(e) => setProductForm({...productForm, category: e.target.value})}>
-                <option value="">Select category</option>
-                <option value="pottery">Pottery</option>
-                <option value="woodwork">Woodwork</option>
-                <option value="textiles">Textiles</option>
-                <option value="jewelry">Jewelry</option>
-                <option value="metalwork">Metalwork</option>
-                <option value="leather">Leather</option>
-                <option value="painting">Painting</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
-              <input type="number" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.price} onChange={(e) => setProductForm({...productForm, price: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Original Price (₹)</label>
-              <input type="number" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.originalPrice} onChange={(e) => setProductForm({...productForm, originalPrice: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Stock Count</label>
-              <input type="number" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.stockCount} onChange={(e) => setProductForm({...productForm, stockCount: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Time</label>
-              <input type="text" required placeholder="e.g., 5-7 days" className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.deliveryTime} onChange={(e) => setProductForm({...productForm, deliveryTime: e.target.value})} />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-            <input type="url" required className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.image} onChange={(e) => setProductForm({...productForm, image: e.target.value})} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea required rows="4" className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.description} onChange={(e) => setProductForm({...productForm, description: e.target.value})} />
-          </div>
-          <div className="flex gap-4">
-            <button type="submit" className="flex-1 bg-primary-600 text-white py-3 px-4 rounded-md hover:bg-primary-700 font-medium">
-              {editingProduct ? 'Update Product' : 'Upload Product'}
-            </button>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
             {editingProduct && (
-              <button type="button" onClick={() => { setEditingProduct(null); setProductForm({ name: '', price: '', originalPrice: '', image: '', category: '', description: '', stockCount: '', deliveryTime: '' }); }} className="px-6 bg-gray-500 text-white py-3 rounded-md hover:bg-gray-600 font-medium">
-                Cancel
+              <button onClick={() => { setEditingProduct(null); setProductForm({ name: '', price: '', originalPrice: '', image: '', category: '', description: '', stockCount: '', deliveryTime: '' }); }} className="text-sm text-gray-600 hover:text-gray-900">
+                Cancel Editing
               </button>
             )}
           </div>
-        </form>
+          <form onSubmit={handleProductSubmit} className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Product Name</label>
+                <input type="text" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" value={productForm.name} onChange={(e) => setProductForm({...productForm, name: e.target.value})} placeholder="Enter product name" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                <select required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" value={productForm.category} onChange={(e) => setProductForm({...productForm, category: e.target.value})}>
+                  <option value="">Select category</option>
+                  <option value="pottery">Pottery</option>
+                  <option value="woodwork">Woodwork</option>
+                  <option value="textiles">Textiles</option>
+                  <option value="jewelry">Jewelry</option>
+                  <option value="metalwork">Metalwork</option>
+                  <option value="leather">Leather</option>
+                  <option value="painting">Painting</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Price (₹)</label>
+                <input type="number" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" value={productForm.price} onChange={(e) => setProductForm({...productForm, price: e.target.value})} placeholder="0.00" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Original Price (₹)</label>
+                <input type="number" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" value={productForm.originalPrice} onChange={(e) => setProductForm({...productForm, originalPrice: e.target.value})} placeholder="0.00" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Stock Count</label>
+                <input type="number" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" value={productForm.stockCount} onChange={(e) => setProductForm({...productForm, stockCount: e.target.value})} placeholder="0" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Delivery Time</label>
+                <input type="text" required placeholder="e.g., 5-7 days" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" value={productForm.deliveryTime} onChange={(e) => setProductForm({...productForm, deliveryTime: e.target.value})} />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Image URL</label>
+              <input type="url" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" value={productForm.image} onChange={(e) => setProductForm({...productForm, image: e.target.value})} placeholder="https://example.com/image.jpg" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+              <textarea required rows="4" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" value={productForm.description} onChange={(e) => setProductForm({...productForm, description: e.target.value})} placeholder="Describe your product..." />
+            </div>
+            <button type="submit" className="w-full bg-orange-600 text-white py-4 px-6 rounded-lg hover:bg-orange-700 font-semibold text-lg transition-colors">
+              {editingProduct ? 'Update Product' : 'Add Product'}
+            </button>
+          </form>
+        </div>
+
+        {/* Products Grid */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">My Products</h2>
+            <div className="flex items-center space-x-2">
+              <Search className="w-5 h-5 text-gray-400" />
+              <input type="text" placeholder="Search products..." className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
+            </div>
+          </div>
+          {myProducts.length === 0 ? (
+            <div className="text-center py-12">
+              <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500">No products yet. Add your first product above!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {myProducts.map((product) => (
+                <div key={product._id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="relative">
+                    <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+                    <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${product.stockCount > 0 ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                      {product.stockCount > 0 ? 'In Stock' : 'Out of Stock'}
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-gray-900 mb-2 text-lg">{product.name}</h3>
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <p className="text-2xl font-bold text-orange-600">₹{product.price}</p>
+                        <p className="text-sm text-gray-400 line-through">₹{product.originalPrice}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-500">Stock</p>
+                        <p className="text-lg font-bold text-gray-900">{product.stockCount}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => handleEdit(product)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        <Edit className="w-4 h-4" /> Edit
+                      </button>
+                      <button onClick={() => handleDelete(product._id)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                        <Trash2 className="w-4 h-4" /> Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -948,35 +1042,46 @@ const SellerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <img src="/src/assets/logo.png" alt="Handmade Nexus" className="h-10 w-auto" />
-              <h1 className="text-2xl font-bold text-primary-600">Handmade Nexus - Seller</h1>
+      {/* Modern Header */}
+      <header className="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center space-x-3">
+              <img src="/src/assets/logo.png" alt="Handmade Nexus" className="h-12 w-auto" />
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">Seller Dashboard</h1>
+                <p className="text-xs text-gray-500">Manage your business</p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
+              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
+                <Bell className="w-5 h-5 text-gray-600" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-orange-500 rounded-full"></span>
+              </button>
+              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <Settings className="w-5 h-5 text-gray-600" />
+              </button>
               <div className="relative">
                 <button 
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-primary-600" />
+                  <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                    <User className="w-6 h-6 text-orange-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700 hidden md:block">
-                    {currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Seller'}
-                  </span>
+                  <div className="text-left hidden md:block">
+                    <p className="text-sm font-semibold text-gray-900">{currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Seller'}</p>
+                    <p className="text-xs text-gray-500">Seller Account</p>
+                  </div>
                   <ChevronDown className="w-4 h-4 text-gray-400 hidden md:block" />
                 </button>
-
                 {showUserDropdown && (
-                  <div className="absolute right-0 mt-3 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-1">
-                    <button
-                      onClick={handleLogout}
-                      className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors rounded-lg font-medium"
-                    >
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-2">
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-sm font-semibold text-gray-900">{currentUser?.displayName || 'Seller'}</p>
+                      <p className="text-xs text-gray-500 truncate">{currentUser?.email}</p>
+                    </div>
+                    <button onClick={handleLogout} className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors font-medium mt-1">
                       Logout
                     </button>
                   </div>
@@ -987,34 +1092,79 @@ const SellerDashboard = () => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Navigation */}
-          <div className="lg:w-64">
-            <nav className="bg-white rounded-lg shadow p-4">
-              <div className="space-y-2">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Dashboard Overview - Only show on profile tab */}
+        {activeTab === 'profile' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <ShoppingBag className="w-6 h-6 text-orange-600" />
+                </div>
+                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+12%</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">{myProducts.length}</h3>
+              <p className="text-sm text-gray-500 mt-1">Total Products</p>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Package className="w-6 h-6 text-blue-600" />
+                </div>
+                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+8%</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">{sellerData.totalOrders}</h3>
+              <p className="text-sm text-gray-500 mt-1">Total Orders</p>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-green-600" />
+                </div>
+                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+23%</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">₹{(myProducts.reduce((sum, p) => sum + (p.price * p.stockCount), 0)).toLocaleString()}</h3>
+              <p className="text-sm text-gray-500 mt-1">Inventory Value</p>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <Star className="w-6 h-6 text-purple-600" />
+                </div>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">{sellerData.rating}</h3>
+              <p className="text-sm text-gray-500 mt-1">Seller Rating</p>
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Modern Sidebar */}
+          <div className="lg:w-72">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sticky top-24">
+              <nav className="space-y-1">
                 {tabs.map((tab) => {
                   const Icon = tab.icon
                   return (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-left transition-colors ${
+                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all ${
                         activeTab === tab.id
-                                                    ? 'bg-primary-600 text-white'
-                          : 'text-gray-700 hover:bg-gray-100'
+                          ? 'bg-orange-50 text-orange-600 font-semibold border-l-4 border-orange-600'
+                          : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent'
                       }`}
                     >
                       <Icon className="w-5 h-5" />
-                      <span>{tab.label}</span>
+                      <span className="text-sm">{tab.label}</span>
                     </button>
                   )
                 })}
-              </div>
-            </nav>
+              </nav>
+            </div>
           </div>
 
-          {/* Main Content */}
+          {/* Main Content Area */}
           <div className="flex-1">
             {activeTab === 'profile' && <ProfileTab />}
             {activeTab === 'products' && <ProductsTab />}
@@ -1027,13 +1177,7 @@ const SellerDashboard = () => {
         </div>
       </div>
 
-      {/* Click outside to close dropdown */}
-      {showUserDropdown && (
-        <div
-          className="fixed inset-0 z-30"
-          onClick={() => setShowUserDropdown(false)}
-        />
-      )}
+      {showUserDropdown && <div className="fixed inset-0 z-30" onClick={() => setShowUserDropdown(false)} />}
     </div>
   )
 }
