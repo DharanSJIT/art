@@ -125,18 +125,7 @@ const LoginPage = () => {
                 <div className="bg-gradient-to-b from-white/15 to-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10">
                   <div className="text-center">
                     <div className="mb-6">
-                      <svg
-                        className="w-8 h-8 text-white/50 mx-auto mb-4"
-                        fill="currentColor"
-                        viewBox="0 0 32 32"
-                      >
-                        <path
-                          d="M10 8v6c0 3.3 2.7 6 6 6h6m0-12v6c0 3.3-2.7 6-6 6h-6"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          fill="none"
-                        />
-                      </svg>
+                     
                       <p className="italic text-white/90 text-lg font-light leading-relaxed">
                         "I brewed some chai while awaiting your return. Even the
                         teapot is handcrafted, naturally."
