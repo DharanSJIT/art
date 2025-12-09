@@ -137,7 +137,9 @@ import {
   signInWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged,
-  updateProfile
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth'
 import { auth } from '../firebase' // Your Firebase config
 import toast from 'react-hot-toast'
@@ -239,6 +241,23 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const loginWithGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider()
+      const result = await signInWithPopup(auth, provider)
+      toast.success('Signed in with Google!')
+      return { success: true, user: result.user }
+    } catch (error) {
+      console.error('❌ Google sign-in error:', error)
+      let message = 'Google sign-in failed'
+      if (error.code === 'auth/popup-closed-by-user') {
+        message = 'Sign-in cancelled'
+      }
+      toast.error(message)
+      throw new Error(message)
+    }
+  }
+
   const logout = async () => {
     try {
       await signOut(auth)
@@ -262,6 +281,7 @@ export const AuthProvider = ({ children }) => {
     currentUser,
     login,
     signup,
+    loginWithGoogle,
     logout,
     axiosInstance,
     API_BASE_URL,

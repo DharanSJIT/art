@@ -62,7 +62,7 @@ const SellerLogin = () => {
       {/* Back Button - Fixed position outside form */}
       <button
         onClick={() => navigate('/user-type')}
-        className="absolute top-[5vh] left-[5vw] flex items-center text-gray-500 hover:text-primary-600 transition-colors z-50"
+        className="absolute top-[5vh] text-xl left-[5vw] flex items-center text-primary-500 hover:text-primary-600 hover:transition-colors hover:underline z-50  p-4 rounded-full"
       >
         <ArrowLeft className="w-5 h-5 mr-2" />
         Back to user
