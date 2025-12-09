@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { useAuth } from '../contexts/AuthContext'
 
 const CustomerDashboard = () => {
   // State management
@@ -22,18 +23,17 @@ const CustomerDashboard = () => {
   const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
   const [showSortDropdown, setShowSortDropdown] = useState(false)
+  const [showUserDropdown, setShowUserDropdown] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [productsPerPage] = useState(12)
   
-  // User state (in real app, this would come from auth context)
-  const [currentUser] = useState({ 
-    name: 'John Doe', 
-    avatar: null,
-    location: 'Mumbai, Maharashtra',
-    id: 'user123'
-  })
-
   const navigate = useNavigate()
+  const { currentUser, logout } = useAuth()
+
+  const handleLogout = async () => {
+    await logout()
+    navigate('/login')
+  }
 
   // Constants
   const categories = [
@@ -910,15 +910,29 @@ const CustomerDashboard = () => {
 
               {/* User Profile Dropdown */}
               <div className="relative">
-                <button className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                <button 
+                  onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
                   <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-primary-600" />
                   </div>
-                  {/* <span className="text-sm font-medium text-gray-700 hidden md:block">
-                    {currentUser.name.split(' ')[0]}
-                  </span> */}
+                  <span className="text-sm font-medium text-gray-700 hidden md:block">
+                    {currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User'}
+                  </span>
                   <ChevronDown className="w-4 h-4 text-gray-400 hidden md:block" />
                 </button>
+
+                {showUserDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 transition-colors rounded-lg font-medium"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1221,11 +1235,12 @@ const CustomerDashboard = () => {
       </div>
 
       {/* Click outside to close dropdowns */}
-      {(showSortDropdown) && (
+      {(showSortDropdown || showUserDropdown) && (
         <div
           className="fixed inset-0 z-30"
           onClick={() => {
             setShowSortDropdown(false)
+            setShowUserDropdown(false)
           }}
         />
       )}

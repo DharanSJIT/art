@@ -253,7 +253,12 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await signOut(auth)
-      toast.success('Logged out successfully')
+      toast.success('Logged out successfully', {
+        style: {
+          background: '#dc2626',
+          color: '#fff',
+        },
+      })
     } catch (error) {
       console.error('Logout error:', error)
       toast.error('Failed to logout')
