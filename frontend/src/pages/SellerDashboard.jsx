@@ -734,6 +734,8 @@ const SellerDashboard = () => {
   )
 
   const ProductsTab = () => {
+    const [myProducts, setMyProducts] = useState([]);
+    const [editingProduct, setEditingProduct] = useState(null);
     const [productForm, setProductForm] = useState({
       name: '',
       price: '',
@@ -745,29 +747,56 @@ const SellerDashboard = () => {
       deliveryTime: ''
     });
 
+    useEffect(() => {
+      fetchMyProducts();
+    }, []);
+
+    const fetchMyProducts = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products`);
+        const data = await response.json();
+        if (data.success) {
+          const sellerProducts = data.data.products.filter(p => p.seller?.id === currentUser?.uid || p.seller?.name === sellerData.name);
+          setMyProducts(sellerProducts);
+        }
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      }
+    };
+
     const handleProductSubmit = async (e) => {
       e.preventDefault();
+      const stockCount = parseInt(productForm.stockCount);
+      if (stockCount <= 0) {
+        toast.error('Stock count must be greater than 0');
+        return;
+      }
+
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products`, {
-          method: 'POST',
+        const url = editingProduct 
+          ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products/${editingProduct._id}`
+          : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products`;
+        
+        const response = await fetch(url, {
+          method: editingProduct ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             ...productForm,
             price: parseFloat(productForm.price),
             originalPrice: parseFloat(productForm.originalPrice),
-            stockCount: parseInt(productForm.stockCount),
+            stockCount: stockCount,
             seller: {
-              id: 'seller1',
+              id: currentUser?.uid,
               name: sellerData.name,
               location: sellerData.address,
               rating: sellerData.rating,
               verified: true
             },
-            rating: 4.5,
-            reviewCount: 0,
-            inStock: true,
-            isPopular: false,
-            isFeatured: false,
+            rating: editingProduct?.rating || 4.5,
+            reviewCount: editingProduct?.reviewCount || 0,
+            inStock: stockCount > 0,
+            isPopular: editingProduct?.isPopular || false,
+            isFeatured: editingProduct?.isFeatured || false,
             discount: Math.round(((productForm.originalPrice - productForm.price) / productForm.originalPrice) * 100),
             tags: [productForm.category],
             shippingCost: 0,
@@ -776,17 +805,77 @@ const SellerDashboard = () => {
         });
         const data = await response.json();
         if (data.success) {
-          alert('Product uploaded successfully!');
+          toast.success(editingProduct ? 'Product updated!' : 'Product uploaded!');
           setProductForm({ name: '', price: '', originalPrice: '', image: '', category: '', description: '', stockCount: '', deliveryTime: '' });
+          setEditingProduct(null);
+          fetchMyProducts();
         }
       } catch (error) {
-        alert('Failed to upload product');
+        toast.error('Failed to save product');
+      }
+    };
+
+    const handleEdit = (product) => {
+      setEditingProduct(product);
+      setProductForm({
+        name: product.name,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        image: product.image,
+        category: product.category,
+        description: product.description,
+        stockCount: product.stockCount,
+        deliveryTime: product.deliveryTime
+      });
+    };
+
+    const handleDelete = async (productId) => {
+      if (!confirm('Are you sure you want to delete this product?')) return;
+      
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products/${productId}`, {
+          method: 'DELETE'
+        });
+        const data = await response.json();
+        if (data.success) {
+          toast.success('Product deleted!');
+          fetchMyProducts();
+        }
+      } catch (error) {
+        toast.error('Failed to delete product');
       }
     };
 
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Upload New Product</h2>
+      <div className="space-y-6">
+        {/* My Products List */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">My Products ({myProducts.length})</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {myProducts.map((product) => (
+              <div key={product._id} className="border rounded-lg p-4">
+                <img src={product.image} alt={product.name} className="w-full h-40 object-cover rounded mb-3" />
+                <h3 className="font-semibold text-gray-900 mb-1">{product.name}</h3>
+                <p className="text-sm text-gray-600 mb-2">₹{product.price}</p>
+                <p className={`text-sm mb-3 ${product.stockCount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  Stock: {product.stockCount} {product.stockCount > 0 ? '(In Stock)' : '(Out of Stock)'}
+                </p>
+                <div className="flex gap-2">
+                  <button onClick={() => handleEdit(product)} className="flex-1 px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete(product._id)} className="flex-1 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Product Form */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">{editingProduct ? 'Edit Product' : 'Upload New Product'}</h2>
         <form onSubmit={handleProductSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -831,10 +920,18 @@ const SellerDashboard = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <textarea required rows="4" className="w-full px-3 py-2 border border-gray-300 rounded-md" value={productForm.description} onChange={(e) => setProductForm({...productForm, description: e.target.value})} />
           </div>
-          <button type="submit" className="w-full bg-primary-600 text-white py-3 px-4 rounded-md hover:bg-primary-700 font-medium">
-            Upload Product
-          </button>
+          <div className="flex gap-4">
+            <button type="submit" className="flex-1 bg-primary-600 text-white py-3 px-4 rounded-md hover:bg-primary-700 font-medium">
+              {editingProduct ? 'Update Product' : 'Upload Product'}
+            </button>
+            {editingProduct && (
+              <button type="button" onClick={() => { setEditingProduct(null); setProductForm({ name: '', price: '', originalPrice: '', image: '', category: '', description: '', stockCount: '', deliveryTime: '' }); }} className="px-6 bg-gray-500 text-white py-3 rounded-md hover:bg-gray-600 font-medium">
+                Cancel
+              </button>
+            )}
+          </div>
         </form>
+        </div>
       </div>
     );
   };

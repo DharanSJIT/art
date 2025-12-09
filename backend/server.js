@@ -244,6 +244,36 @@ app.get('/api/products/:id', async (req, res) => {
   }
 });
 
+app.put('/api/products/:id', async (req, res) => {
+  try {
+    console.log('🔄 Updating product:', req.params.id);
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+    console.log('✅ Product updated:', product._id);
+    res.json({ success: true, data: { product } });
+  } catch (error) {
+    console.error('❌ Product update error:', error.message);
+    res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    console.log('🗑️ Deleting product:', req.params.id);
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+    console.log('✅ Product deleted:', product._id);
+    res.json({ success: true, message: 'Product deleted successfully' });
+  } catch (error) {
+    console.error('❌ Product delete error:', error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // Import auth routes (make sure this file exists)
 try {
   const authRoutes = require('./src/routes/auth')
