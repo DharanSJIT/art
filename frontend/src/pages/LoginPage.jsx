@@ -4,16 +4,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const LoginPage = () => {
+  const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
+    confirmPassword: ""
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const { login } = useAuth();
+  const { login, signup } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,15 +30,32 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (isSignup) {
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
+      if (formData.password.length < 6) {
+        setError('Password must be at least 6 characters long');
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
-      await login(formData.email, formData.password);
-      navigate("/customer/dashboard");
+      if (isSignup) {
+        await signup(formData.email, formData.password, formData.name);
+        navigate('/user-type');
+      } else {
+        await login(formData.email, formData.password);
+        navigate("/customer/dashboard");
+      }
     } catch (error) {
       setError(
         error.response?.data?.message ||
-          "Hmm, that didn't work. Let's try that again."
+          (isSignup ? "Signup failed. Please try again." : "Hmm, that didn't work. Let's try that again.")
       );
     } finally {
       setLoading(false);
@@ -185,10 +206,10 @@ const LoginPage = () => {
           {/* Friendly greeting */}
           <div className="mb-8">
             <h2 className="text-2xl lg:text-3xl font-normal text-gray-900 mb-3">
-              Welcome back
+              {isSignup ? "Create your account" : "Welcome back"}
             </h2>
             <p className="text-gray-600">
-              Ready to dive back into beautiful handmade things?
+              {isSignup ? "Join our community of craft enthusiasts" : "Ready to dive back into beautiful handmade things?"}
             </p>
           </div>
 
@@ -209,6 +230,35 @@ const LoginPage = () => {
 
           {/* The form */}
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Name field - only for signup */}
+            {isSignup && (
+              <div className="space-y-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Full Name
+                </label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-gray-400 group-focus-within:text-amber-500 transition-colors">
+                      👤
+                    </span>
+                  </div>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 transition-all hover:border-gray-400"
+                    placeholder="Your full name"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Email field */}
             <div className="space-y-2">
               <label
@@ -244,14 +294,16 @@ const LoginPage = () => {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Your secret password
+                  {isSignup ? "Password" : "Your secret password"}
                 </label>
-                <Link
-                  to="/forgot-password"
-                  className="text-sm text-amber-600 hover:text-amber-700 transition-colors"
-                >
-                  Forgot it?
-                </Link>
+                {!isSignup && (
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm text-amber-600 hover:text-amber-700 transition-colors"
+                  >
+                    Forgot it?
+                  </Link>
+                )}
               </div>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -289,8 +341,54 @@ const LoginPage = () => {
               </div>
             </div>
 
-            {/* Remember me */}
-            <div className="flex items-center">
+            {/* Confirm Password field - only for signup */}
+            {isSignup && (
+              <div className="space-y-2">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Confirm Password
+                </label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-gray-400 group-focus-within:text-amber-500 transition-colors">
+                      🔒
+                    </span>
+                  </div>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    required
+                    className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 transition-all hover:border-gray-400"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    title={showConfirmPassword ? "Hide password" : "Show password"}
+                  >
+                    {showConfirmPassword ? (
+                      <span className="text-gray-400 hover:text-gray-600 transition-colors">
+                        👁️
+                      </span>
+                    ) : (
+                      <span className="text-gray-400 hover:text-gray-600 transition-colors">
+                        🗨️
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Remember me - only for login */}
+            {!isSignup && (
+              <div className="flex items-center">
               <input
                 id="remember-me"
                 name="remember-me"
@@ -308,7 +406,8 @@ const LoginPage = () => {
                   So you don't have to type this again next time
                 </span>
               </label>
-            </div>
+              </div>
+            )}
 
             {/* Submit button */}
             <button
@@ -319,10 +418,10 @@ const LoginPage = () => {
               {loading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                  Signing in...
+                  {isSignup ? "Creating account..." : "Signing in..."}
                 </>
               ) : (
-                "Sign in"
+                isSignup ? "Create account" : "Sign in"
               )}
             </button>
           </form>
@@ -335,20 +434,24 @@ const LoginPage = () => {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-4 bg-white text-gray-500">
-                  New around here?
+                  {isSignup ? "Already have an account?" : "New around here?"}
                 </span>
               </div>
             </div>
 
-            {/* Join link */}
+            {/* Toggle link */}
             <div className="mt-6">
-              <Link
-                to="/signup"
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSignup(!isSignup);
+                  setError("");
+                  setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+                }}
                 className="w-full inline-flex justify-center items-center py-3.5 px-4 border border-gray-300 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all hover:border-gray-400"
               >
-                {/* <span className="mr-2">✨</span> */}
-                Join our craft community
-              </Link>
+                {isSignup ? "Sign in to your account" : "Join our craft community"}
+              </button>
             </div>
           </div>
 
