@@ -80,13 +80,14 @@ const ApplicationForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-white flex items-center justify-center py-8">
       <div className="container mx-auto p-4 lg:p-8">
-        <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-md border overflow-hidden">
           
           {/* Left Branding Panel */}
-          <div className="md:w-2/5 bg-gray-500 text-white p-8 md:p-12 flex flex-col justify-between">
-            <div>
+          <div className="md:w-2/5 bg-amber-600 text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: "url('/src/assets/intern.png')" }}></div>
+            <div className="relative z-10">
               <h2 className="text-3xl font-bold mb-4">Join Our Team</h2>
               <p className="mb-8 opacity-90">
                 Become a vital part of our mission to empower local artisans. This is more than an internship—it's an opportunity to make a real impact.
@@ -106,7 +107,7 @@ const ApplicationForm = () => {
                 </li>
               </ul>
             </div>
-            <div className="mt-8 text-center opacity-80 text-sm">
+            <div className="mt-8 text-center opacity-80 text-sm relative z-10">
               Handmade Nexus &copy; {new Date().getFullYear()}
             </div>
           </div>
@@ -137,7 +138,7 @@ const ApplicationForm = () => {
                 <InputField name="skills" label="Skills" type="text" value={formData.skills} onChange={handleChange} icon={Star} required placeholder="e.g., Digital Marketing, Content Writing" />
                 <div>
                   <label htmlFor="experience" className="block text-sm font-medium text-gray-700 mb-2">Share Your Experience</label>
-                  <textarea id="experience" name="experience" rows="5" value={formData.experience} onChange={handleChange} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500 block w-full p-3 transition" placeholder="Tell us about your previous experience..."></textarea>
+                  <textarea id="experience" name="experience" rows="5" value={formData.experience} onChange={handleChange} required className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 block w-full p-3 transition" placeholder="Tell us about your previous experience..."></textarea>
                 </div>
               </section>
 
@@ -151,7 +152,7 @@ const ApplicationForm = () => {
               </section>
 
               <div className="pt-4">
-                <button type="submit" disabled={loading} className="w-full inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-primary-500  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300">
+                <button type="submit" disabled={loading} className="w-full inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300">
                   <Send className="w-5 h-5 mr-3" />
                   {loading ? 'Submitting...' : 'Submit Application'}
                 </button>
@@ -181,7 +182,7 @@ const InputField = ({ name, label, type, value, onChange, icon: Icon, required =
         required={required}
         maxLength={maxLength}
         placeholder={placeholder}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500 block w-full pl-12 p-3 transition"
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 block w-full pl-12 p-3 transition"
         min={type === 'number' ? '18' : undefined}
       />
     </div>
