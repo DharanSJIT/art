@@ -85,126 +85,188 @@ const togglePassword = () => {
           </div>
         </div>
 
-        {/* RIGHT SIDE: Form Section */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 md:p-8">
-          <button
-            onClick={() => navigate('/user-type')}
-            className="lg:hidden mb-8 inline-flex items-center text-primary-500 hover:text-primary-600 font-medium"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to user
-          </button>
-          <div className="mx-auto w-full max-w-md">
-
-          {/* Heading */}
-          <div className="text-center mb-10">
-        <h1 className="text-3xl font-extrabold text-gray-800 tracking-wide uppercase">
-          Seller Login
-        </h1>
-        <p className="text-gray-500 text-sm mt-2">Access your seller dashboard</p>
-      </div>
-
-          <form onSubmit={handleSubmit} className="space-y-7">
-
-        {/* Email Input */}
-        <div className="relative group">
-          <label htmlFor="email" className="sr-only">Email Address</label>
-
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-primary-600 transition-colors" />
+      {/* Right side - Login Form */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 md:p-8">
+        <div className="mx-auto w-full max-w-md">
+          {/* Mobile Back Button */}
+          <div className="lg:hidden mb-8">
+            <Link
+              to="/user-type"
+              className="inline-flex items-center text-amber-700 hover:text-amber-800 font-medium group"
+            >
+              <span className="mr-2">←</span>
+              Back to user selection
+            </Link>
           </div>
 
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email Address"
-            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-full 
-                       text-gray-700 placeholder-gray-400
-                       focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                       transition-all shadow-sm hover:shadow"
-          />
-        </div>
-
-        {/* Password Input with Show/Hide Button */}
-        <div className="relative group">
-          <label htmlFor="password" className="sr-only">Password</label>
-
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-primary-600 transition-colors" />
+          {/* Mobile Logo */}
+          <div className="lg:hidden mb-10">
+            <div className="flex items-center space-x-4 mb-6">
+              <img src="/src/assets/logo.png" alt="Handmade Nexus" className="h-12 w-auto" />
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">
+                  Handmade Nexus
+                </h1>
+                <p className="text-gray-600 text-sm">Seller Portal</p>
+              </div>
+            </div>
           </div>
 
-          <input
-            type={showPassword ? "text" : "password"}
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-full 
-                       text-gray-700 placeholder-gray-400
-                       focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                       transition-all shadow-sm hover:shadow"
-          />
+          {/* Friendly greeting */}
+          <div className="mb-8">
+            <h2 className="text-2xl lg:text-3xl text-2xl font-semibold text-gray-900 mb-3 text-center">
+              Seller Login
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Access your dashboard to manage products and orders
+            </p>
+          </div>
 
-          {/* Toggle Button */}
-          <button
-            type="button"
-            onClick={togglePassword}
-            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 
-                       hover:text-gray-600 transition-colors focus:outline-none"
-          >
-            {showPassword ? (
-              // Eye Off Icon
-              <svg xmlns="http://www.w3.org/2000/svg" 
-                  className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 
-                       0-1.076.178-2.11.507-3.075M6.228 6.228A9.956 9.956 0 0112 5c5.523 0 
-                       10 4.477 10 10 0 1.14-.192 2.234-.546 3.257M4 4l16 16" />
-              </svg>
-            ) : (
-              // Eye Icon
-              <svg xmlns="http://www.w3.org/2000/svg" 
-                  className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 
-                       8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 
-                       7-4.478 0-8.268-2.943-9.542-7z" />
-              </svg>
-            )}
-          </button>
-        </div>
+          {/* The form */}
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Email field */}
+            <div className="space-y-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Your email address
+              </label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-400 group-focus-within:text-amber-500 transition-colors">
+                    @
+                  </span>
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 transition-all hover:border-gray-400"
+                  placeholder="name@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 px-6 bg-primary-600 text-white font-semibold rounded-full 
-                     hover:bg-primary-700 focus:outline-none 
-                     focus:ring-2 focus:ring-offset-2 focus:ring-primary-500
-                     transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
-        >
-          {loading ? "Signing in..." : "LOGIN"}
-        </button>
+            {/* Password field */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Your password
+                </label>
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-400 group-focus-within:text-amber-500 transition-colors">
+                    🔒
+                  </span>
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 transition-all hover:border-gray-400"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                  title={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <span className="text-gray-400 hover:text-gray-600 transition-colors">
+                      👁️
+                    </span>
+                  ) : (
+                    <span className="text-gray-400 hover:text-gray-600 transition-colors">
+                      👁️🗨️
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
 
-        {/* Register Link */}
-        <p className="text-center text-sm text-gray-600 mt-2">
-          Don't have an account?{" "}
-          <Link
-            to="/seller/register"
-            className="text-primary-600 hover:text-primary-700 font-semibold hover:underline"
-          >
-            Register here
-          </Link>
-        </p>
+            {/* Submit button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-lg text-base font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-70 disabled:cursor-not-allowed transition-colors shadow-sm hover:shadow"
+            >
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+                  Signing in...
+                </>
+              ) : (
+                "Sign in"
+              )}
+            </button>
           </form>
+
+          {/* Divider */}
+          <div className="mt-8">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500">
+                  New seller?
+                </span>
+              </div>
+            </div>
+
+            {/* Register link */}
+            <div className="mt-6">
+              <Link
+                to="/seller/register"
+                className="w-full inline-flex justify-center items-center py-3.5 px-4 border border-gray-300 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all hover:border-gray-400"
+              >
+                Register as a seller
+              </Link>
+            </div>
+          </div>
+
+          {/* Small human touch */}
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center text-xs text-gray-400">
+              <span className="mr-2">Handcrafted with care</span>
+              <div className="flex">
+                <span
+                  className="animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                >
+                  ♥
+                </span>
+                <span
+                  className="animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                >
+                  ♥
+                </span>
+                <span
+                  className="animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                >
+                  ♥
+                </span>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   )
