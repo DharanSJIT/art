@@ -14,6 +14,9 @@ const ProductsTab = ({ currentUser, sellerData }) => {
   })
   const [searchTerm, setSearchTerm] = useState('')
   const [isFormVisible, setIsFormVisible] = useState(false)
+  const [deleteModal, setDeleteModal] = useState({ show: false, productId: null, productName: '' })
+  const [showToast, setShowToast] = useState(false)
+  const [successToast, setSuccessToast] = useState({ show: false, message: '' })
 
   useEffect(() => {
     fetchMyProducts()
@@ -73,7 +76,8 @@ const ProductsTab = ({ currentUser, sellerData }) => {
       })
       const data = await response.json()
       if (data.success) {
-        toast.success(editingProduct ? 'Product updated successfully!' : 'Product added to your collection!')
+        setSuccessToast({ show: true, message: editingProduct ? 'Product updated successfully!' : 'Product added to your collection!' })
+        setTimeout(() => setSuccessToast({ show: false, message: '' }), 3000)
         setProductForm({ name: '', price: '', originalPrice: '', image: '', category: '', description: '', stockCount: '', deliveryTime: '' })
         setEditingProduct(null)
         setIsFormVisible(false)
@@ -99,21 +103,21 @@ const ProductsTab = ({ currentUser, sellerData }) => {
     setIsFormVisible(true)
   }
 
-  const handleDelete = async (productId) => {
-    if (!window.confirm('Are you sure you want to remove this product from your collection?')) return
-    
+  const confirmDelete = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products/${productId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'}/products/${deleteModal.productId}`, {
         method: 'DELETE'
       })
       const data = await response.json()
       if (data.success) {
-        toast.success('Product removed from collection')
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 3000)
         fetchMyProducts()
       }
     } catch (error) {
       toast.error('Failed to delete product')
     }
+    setDeleteModal({ show: false, productId: null, productName: '' })
   }
 
   const filteredProducts = myProducts.filter(product =>
@@ -499,7 +503,7 @@ const ProductsTab = ({ currentUser, sellerData }) => {
                   Edit Details
                 </button>
                 <button
-                  onClick={() => handleDelete(product._id)}
+                  onClick={() => setDeleteModal({ show: true, productId: product._id, productName: product.name })}
                   className="flex-1 py-2 px-3 bg-white text-red-600 rounded-lg border border-red-200 hover:bg-red-50 hover:border-red-300 transition-all duration-200 font-medium flex items-center justify-center gap-1.5 text-xs leading-none"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -512,6 +516,66 @@ const ProductsTab = ({ currentUser, sellerData }) => {
           </div>
         )}
       </div>
+
+      {/* Success Toast */}
+      {successToast.show && (
+        <div 
+          className="fixed z-50 animate-slideInRight"
+          style={{ top: '6vh', right: '2vw' }}
+        >
+          <div className="bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 min-w-[320px]">
+            <CheckCircle className="w-5 h-5" />
+            <span className="font-medium">{successToast.message}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Toast */}
+      {showToast && (
+        <div 
+          className="fixed right-0 z-50 animate-slideInRight"
+          style={{ top: '7vh', right: '2vw' }}
+        >
+          <div className="bg-red-500 text-white px-6 py-4 rounded-l-xl shadow-2xl flex items-center gap-3 min-w-[320px]">
+            <CheckCircle className="w-5 h-5" />
+            <span className="font-medium">Product removed from collection</span>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModal.show && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
+                <AlertCircle className="w-6 h-6 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">Remove Product</h3>
+                <p className="text-sm text-gray-600 mt-1">This action cannot be undone</p>
+              </div>
+            </div>
+            <p className="text-gray-700 mb-6">
+              Are you sure you want to remove <span className="font-semibold">{deleteModal.productName}</span> from your collection?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteModal({ show: false, productId: null, productName: '' })}
+                className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex-1 py-3 px-4 bg-red-600 text-white rounded-xl hover:bg-red-700 font-medium transition-colors"
+              >
+                Remove Product
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
