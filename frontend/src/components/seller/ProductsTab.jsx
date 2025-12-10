@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { 
   Package, CheckCircle, AlertCircle, Search, Edit, Trash2, 
   Plus, X, Tag, DollarSign, Calendar, Hash, Image as ImageIcon,
-  FileText, TrendingUp, BarChart3, Layers, Clock, Award
+  FileText, TrendingUp, BarChart3, Layers, Clock, Award, Star
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -440,61 +440,81 @@ const ProductsTab = ({ currentUser, sellerData }) => {
 
                 {/* Product Info */}
                 <div className="space-y-4">
-                  <div>
-                    <h3 className="font-bold text-gray-900 text-lg mb-2 group-hover:text-orange-700 transition-colors line-clamp-1">
-                      {product.name}
-                    </h3>
-                    <div className={`inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium ${getCategoryColor(product.category)}`}>
-                      {product.category}
-                    </div>
-                  </div>
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-3 mb-3">
+  <div className="min-w-0 flex-1">
+    <h3 className="font-bold text-gray-900 text-base group-hover:text-orange-700 transition-colors line-clamp-2 leading-tight mb-1.5">
+      {product.name}
+    </h3>
+  </div>
+  <div className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ${getCategoryColor(product.category)} leading-none whitespace-nowrap flex-shrink-0`}>
+    {product.category}
+  </div>
+</div>
+              </div>
 
-                  {/* Pricing */}
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-2xl font-bold text-orange-600">₹{product.price}</span>
-                        {product.originalPrice > product.price && (
-                          <span className="text-sm text-gray-400 line-through">₹{product.originalPrice}</span>
-                        )}
-                      </div>
-                      {product.originalPrice > product.price && (
-                        <span className="text-sm font-medium text-green-600">
-                          Save ₹{product.originalPrice - product.price}
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <Clock className="w-4 h-4" />
-                        {product.deliveryTime}
-                      </div>
-                    </div>
+              {/* Pricing & Info */}
+              <div className="flex items-center justify-between pt-1">
+                <div className="space-y-1">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-xl font-bold text-orange-600 leading-none">₹{product.price}</span>
+                    {product.originalPrice > product.price && (
+                      <span className="text-xs text-gray-400 line-through leading-none">₹{product.originalPrice}</span>
+                    )}
                   </div>
-
-                  {/* Description Preview */}
-                  <p className="text-sm text-gray-600 line-clamp-2 min-h-[2.5rem]">
-                    {product.description}
-                  </p>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-3 pt-4">
-                    <button
-                      onClick={() => handleEdit(product)}
-                      className="flex-1 py-2.5 px-4 bg-white text-blue-600 rounded-xl border border-blue-200 hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 font-medium flex items-center justify-center gap-2"
-                    >
-                      <Edit className="w-4 h-4" />
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(product._id)}
-                      className="flex-1 py-2.5 px-4 bg-white text-red-600 rounded-xl border border-red-200 hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-medium flex items-center justify-center gap-2"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      Remove
-                    </button>
-                  </div>
+                  {product.originalPrice > product.price && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-medium text-green-600 bg-green-50 px-1.5 py-0.5 rounded leading-none">
+                        Save ₹{product.originalPrice - product.price}
+                      </span>
+                      <span className="text-[10px] font-semibold text-green-700 leading-none">
+                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                      </span>
+                    </div>
+                  )}
                 </div>
+                <div className="text-right space-y-1">
+                  <div className="flex items-center justify-end gap-1 text-xs text-gray-600 leading-tight">
+                    <Clock className="w-3.5 h-3.5 flex-shrink-0" />
+                    {product.deliveryTime}
+                    <p>days</p>
+                  </div>
+                  {product.rating && (
+                    <div className="flex items-center justify-end gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star 
+                          key={i} 
+                          className={`w-3 h-3 ${i < Math.floor(product.rating || 0) ? 'text-amber-500 fill-amber-500' : 'text-gray-300'}`} 
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Description Preview */}
+              <p className="text-md text-gray-600 leading-relaxed line-clamp-2 min-h-[2.5rem] pt-1">
+                {product.description}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEdit(product)}
+                  className="flex-1 py-3 px-3 bg-white text-blue-600 rounded-lg border border-blue-200 hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 font-medium flex items-center justify-center gap-1.5 text-sm leading-none"
+                >
+                  <Edit className="w-3.5 h-3.5" />
+                  Edit Details
+                </button>
+                <button
+                  onClick={() => handleDelete(product._id)}
+                  className="flex-1 py-2 px-3 bg-white text-red-600 rounded-lg border border-red-200 hover:bg-red-50 hover:border-red-300 transition-all duration-200 font-medium flex items-center justify-center gap-1.5 text-xs leading-none"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Remove
+                </button>
+              </div>
+            </div>
               </div>
             ))}
           </div>
