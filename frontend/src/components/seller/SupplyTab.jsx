@@ -9,6 +9,7 @@ const SupplyTab = ({ currentUser, sellerData }) => {
   const [myQuotes, setMyQuotes] = useState([])
   const [incomingQuotes, setIncomingQuotes] = useState([])
   const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
   const [showQuoteModal, setShowQuoteModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [quoteToDelete, setQuoteToDelete] = useState(null)
@@ -108,7 +109,19 @@ const SupplyTab = ({ currentUser, sellerData }) => {
     <div className="space-y-6">
       {/* My Quote Requests */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">My Quote Requests ({myQuotes.length})</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-gray-900">My Quote Requests ({myQuotes.length})</h2>
+          <button 
+            onClick={() => {
+              setSelectedSupplier(null)
+              setShowQuoteModal(true)
+            }}
+            className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Request Quote
+          </button>
+        </div>
         {myQuotes.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             <Package className="w-12 h-12 mx-auto mb-3 text-gray-300" />
@@ -122,7 +135,7 @@ const SupplyTab = ({ currentUser, sellerData }) => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <Package className="w-4 h-4 text-orange-600" />
-                      <h4 className="font-semibold text-gray-900">{quote.material}</h4>
+                      <h4 className="text-xl font-semibold  text-gray-900">{quote.material}</h4>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         quote.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
                         quote.status === 'approved' ? 'bg-green-100 text-green-700' :
@@ -147,9 +160,9 @@ const SupplyTab = ({ currentUser, sellerData }) => {
                         setQuoteToDelete(quote.id)
                         setShowDeleteModal(true)
                       }}
-                      className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-xs font-medium flex items-center gap-1 whitespace-nowrap"
+                      className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-lg font-medium flex items-center gap-1 whitespace-nowrap"
                     >
-                      <Trash2 className="w-3 h-3" />
+                      <Trash2 className="w-4 h-4" />
                       Delete
                     </button>
                   </div>
@@ -176,7 +189,7 @@ const SupplyTab = ({ currentUser, sellerData }) => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <Package className="w-4 h-4 text-blue-600" />
-                      <h4 className="font-semibold text-gray-900">{quote.material}</h4>
+                      <h4 className=" text-xl font-semibold text-gray-900">{quote.material}</h4>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         quote.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
                         quote.status === 'approved' ? 'bg-green-100 text-green-700' :
@@ -186,7 +199,7 @@ const SupplyTab = ({ currentUser, sellerData }) => {
                       </span>
                     </div>
                     <div className="text-sm text-gray-600 space-y-1">
-                      <p><span className="font-medium">Requested by:</span> {quote.sellerName || 'Unknown'}</p>
+                      <p><span className=" font-medium ">Requested by:</span> {quote.sellerName || 'Unknown'}</p>
                       <p><span className="font-medium">Quantity:</span> {quote.quantity}</p>
                       {quote.message && <p><span className="font-medium">Message:</span> {quote.message}</p>}
                       {quote.sellerPhone && (
@@ -205,7 +218,7 @@ const SupplyTab = ({ currentUser, sellerData }) => {
                           window.location.href = `tel:${quote.sellerPhone}`
                           toast.success(`Calling ${quote.sellerName}...`)
                         }}
-                        className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium whitespace-nowrap"
+                        className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-md font-medium whitespace-nowrap"
                       >
                         Contact Seller
                       </button>
@@ -214,95 +227,6 @@ const SupplyTab = ({ currentUser, sellerData }) => {
                 </div>
               </div>
             ))}
-          </div>
-        )}
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Raw Material Suppliers</h2>
-            <p className="text-sm text-gray-500 mt-1">Find quality materials for your craft</p>
-          </div>
-          <button 
-            onClick={() => {
-              setSelectedSupplier(null)
-              setShowQuoteModal(true)
-            }}
-            className="flex items-center justify-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            Request Quote
-          </button>
-        </div>
-
-        {suppliers.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            No suppliers available at the moment.
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {suppliers.map((supplier) => (
-            <div key={supplier.id} className="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all hover:border-orange-300">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 text-xl mb-2">{supplier.name}</h3>
-                  <div className="flex flex-wrap items-center gap-4 text-sm">
-                    <div className="flex items-center text-gray-600">
-                      <MapPin className="w-4 h-4 text-gray-400 mr-2" />
-                      {supplier.location}
-                    </div>
-                    <div className="flex items-center text-gray-600">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current mr-2" />
-                      {supplier.rating}/5 Rating
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => {
-                      setSelectedSupplier(supplier)
-                      setShowQuoteModal(true)
-                    }}
-                    className="px-4 py-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors font-medium whitespace-nowrap"
-                  >
-                    Request Quote
-                  </button>
-                  <button 
-                    onClick={() => {
-                      window.location.href = `tel:${supplier.contact}`
-                      toast.success(`Calling ${supplier.name}...`)
-                    }}
-                    className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium whitespace-nowrap"
-                  >
-                    Contact
-                  </button>
-                </div>
-              </div>
-              
-              <div className="mb-4">
-                <h4 className="font-semibold text-gray-700 mb-3">Available Materials</h4>
-                <div className="flex flex-wrap gap-2">
-                  {supplier.materials.map((material, index) => (
-                    <span key={index} className="px-4 py-2 bg-orange-50 text-orange-700 text-sm rounded-lg font-medium border border-orange-200">
-                      {material}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="flex flex-wrap gap-6 text-sm">
-                <div>
-                  <span className="text-gray-500">Min Order:</span>
-                  <span className="font-bold text-gray-900 ml-2">₹{supplier.minOrder}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Contact:</span>
-                  <span className="font-bold text-gray-900 ml-2">{supplier.contact}</span>
-                </div>
-              </div>
-            </div>
-          ))}
           </div>
         )}
       </div>
@@ -319,9 +243,11 @@ const SupplyTab = ({ currentUser, sellerData }) => {
             </div>
             <form onSubmit={async (e) => {
               e.preventDefault()
+              setSubmitting(true)
               try {
                 if (!sellerData?.email) {
                   toast.error('Seller email not found. Please update your profile.')
+                  setSubmitting(false)
                   return
                 }
                 
@@ -351,6 +277,8 @@ const SupplyTab = ({ currentUser, sellerData }) => {
               } catch (error) {
                 console.error('Error submitting quote:', error)
                 toast.error('Failed to submit quote request')
+              } finally {
+                setSubmitting(false)
               }
             }} className="space-y-4">
               {selectedSupplier && (
@@ -404,9 +332,10 @@ const SupplyTab = ({ currentUser, sellerData }) => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-medium"
+                  disabled={submitting}
+                  className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Submit Request
+                  {submitting ? 'Submitting...' : 'Submit Request'}
                 </button>
               </div>
             </form>
@@ -439,7 +368,7 @@ const SupplyTab = ({ currentUser, sellerData }) => {
               </button>
               <button
                 onClick={handleDeleteQuote}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-md font-medium"
               >
                 Delete
               </button>
