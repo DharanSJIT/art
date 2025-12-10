@@ -77,9 +77,10 @@ const togglePassword = () => {
           
           {/* Welcome Text over image */}
           <div className="absolute inset-0 flex items-center justify-center p-12 text-white text-center z-10">
-            <div>
-                <h2 className="text-3xl font-bold mb-4">Welcome Seller</h2>
-                <p className="text-primary-100">Sign in to access your dashboard, manage products, and track your success.</p>
+            <div className="max-w-lg">
+                <h2 className="text-4xl font-bold mb-4">Welcome Seller</h2>
+                <p className="text-lg text-primary-100 mb-6">Sign in to access your dashboard, manage products, and track your success.</p>
+                <p className="text-base text-primary-50 leading-relaxed">Manage your product inventory and pricing. Connect with buyers and other sellers. Track orders and grow your business.</p>
             </div>
           </div>
         </div>

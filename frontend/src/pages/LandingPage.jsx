@@ -509,14 +509,14 @@ const LandingPage = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                to="/signup?type=customer" 
+                to="/login" 
                 className="bg-amber-600 text-white px-8 py-3 rounded-lg hover:bg-amber-700 transition-colors font-medium flex items-center justify-center"
               >
                 <ShoppingBag className="mr-2 w-5 h-5" />
                 Shop Handmade
               </Link>
               <Link 
-                to="/signup?type=seller" 
+                to="/user-type" 
                 className="border-2 border-amber-600 text-amber-600 px-8 py-3 rounded-lg hover:bg-amber-50 transition-colors font-medium flex items-center justify-center"
               >
                 <Palette className="mr-2 w-5 h-5" />
