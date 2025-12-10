@@ -33,25 +33,25 @@ const LandingPage = () => {
       // rating: 4.8,
       // reviews: 156,
       // location: 'Jaipur, Rajasthan',
-      badge: 'Bestseller'
+      // badge: 'Bestseller'
     },
     {
       id: 2,
       name: 'Wooden Coffee Table',
       image: 'https://fleck.co.in/cdn/shop/products/Skog_Solid_wood_coffee_table_by_Fleck.jpg?v=1745549643',
-      badge: 'Premium'
+      // badge: 'Premium'
     },
     {
       id: 3,
       name: 'Handwoven Silk Saree',
       image: 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcShiNRdh3nt_ciTcw3a6xLurfFY8farWbxvYSXho6Sa3s7G_y9fEC385YZoCu-eYcyfS3KB8ecH8gpuRKMUyiXQx17tWBb9z4p_lVSaVP4G7lXRbxceyaH8m9Cxo4-EFyD_ojlXC-0&usqp=CAc',
-      badge: 'Traditional'
+      // badge: 'Traditional'
     },
     {
       id: 4,
       name: 'Silver Jewelry Set',
       image: 'https://m.media-amazon.com/images/I/91Dmt+DXl7L._AC_UY1100_.jpg',
-      badge: 'Handmade'
+      // badge: 'Handmade'
     }
   ]
 
@@ -354,7 +354,7 @@ const LandingPage = () => {
       </section>
 
       {/* Categories Section */}
-      <section id="categories" className="py-16">
+      {/* <section id="categories" className="py-16">
         <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ width: '85vw' }}>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Explore by Craft</h2>
@@ -384,7 +384,7 @@ const LandingPage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Featured Products */}
       <section className="bg-white py-16">
@@ -401,13 +401,9 @@ const LandingPage = () => {
                   <img 
                     src={product.image} 
                     alt={product.name}
-                    className="w-full h-48 object-cover group-hover:scale-[1.02] transition-transform duration-300"
+                    className="w-full h-60 object-cover group-hover:scale-[1.02] transition-transform duration-300"
                   />
-                  <div className="absolute top-3 left-3">
-                    <span className="bg-amber-600 text-white px-2 py-1 rounded text-xs font-medium">
-                      {product.badge}
-                    </span>
-                  </div>
+                 
                 </div>
                 
                 <div className="p-4">
