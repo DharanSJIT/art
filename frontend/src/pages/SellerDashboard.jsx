@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { User, Package, Users, Truck, CreditCard, ChevronDown, Bell, Settings } from 'lucide-react'
+import { User, Package, Users, Truck, CreditCard, ChevronDown, Bell, Settings, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import toast from 'react-hot-toast'
 import ProfileTab from '../components/seller/ProfileTab'
 import ProductsTab from '../components/seller/ProductsTab'
 import OrdersTab from '../components/seller/OrdersTab'
@@ -15,6 +16,7 @@ const SellerDashboard = () => {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('profile')
   const [showUserDropdown, setShowUserDropdown] = useState(false)
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [sellerData, setSellerData] = useState({
     name: currentUser?.displayName || currentUser?.email || 'Seller',
     email: currentUser?.email || '',
@@ -66,6 +68,39 @@ const SellerDashboard = () => {
     fetchSellerData()
   }, [currentUser])
 
+  const [editForm, setEditForm] = useState({})
+
+  const handleOpenSettings = () => {
+    setEditForm(sellerData)
+    setShowSettingsModal(true)
+  }
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault()
+    try {
+      const { doc, updateDoc } = await import('firebase/firestore')
+      const { db } = await import('../firebase')
+      await updateDoc(doc(db, 'sellers', currentUser.uid), {
+        name: editForm.name,
+        email: editForm.email,
+        phoneNumber: editForm.phone,
+        alternatePhoneNumber: editForm.alternatePhoneNumber,
+        address: editForm.address,
+        city: editForm.city,
+        state: editForm.state,
+        pincode: editForm.pincode,
+        age: editForm.age,
+        productType: editForm.productType,
+        experience: editForm.experience
+      })
+      setSellerData(editForm)
+      setShowSettingsModal(false)
+      toast.success('Profile updated successfully!')
+    } catch (error) {
+      toast.error('Failed to update profile')
+    }
+  }
+
   const handleLogout = async () => {
     await logout()
     navigate('/seller/login')
@@ -98,7 +133,7 @@ const SellerDashboard = () => {
                 <Bell className="w-5 h-5 text-gray-600" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-orange-500 rounded-full"></span>
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <button onClick={handleOpenSettings} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                 <Settings className="w-5 h-5 text-gray-600" />
               </button>
               <div className="relative">
@@ -171,6 +206,75 @@ const SellerDashboard = () => {
       </div>
 
       {showUserDropdown && <div className="fixed inset-0 z-30" onClick={() => setShowUserDropdown(false)} />}
+      
+      {showSettingsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">Update Profile</h2>
+              <button onClick={() => setShowSettingsModal(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleUpdateProfile} className="p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <input type="text" value={editForm.name} onChange={(e) => setEditForm({...editForm, name: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input type="email" value={editForm.email} onChange={(e) => setEditForm({...editForm, email: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                  <input type="text" value={editForm.age} onChange={(e) => setEditForm({...editForm, age: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                  <input type="text" value={editForm.phone} onChange={(e) => setEditForm({...editForm, phone: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Alternate Phone</label>
+                  <input type="text" value={editForm.alternatePhoneNumber} onChange={(e) => setEditForm({...editForm, alternatePhoneNumber: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                  <input type="text" value={editForm.address} onChange={(e) => setEditForm({...editForm, address: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                  <input type="text" value={editForm.city} onChange={(e) => setEditForm({...editForm, city: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                  <input type="text" value={editForm.state} onChange={(e) => setEditForm({...editForm, state: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
+                  <input type="text" value={editForm.pincode} onChange={(e) => setEditForm({...editForm, pincode: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Product Type</label>
+                  <input type="text" value={editForm.productType} onChange={(e) => setEditForm({...editForm, productType: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Experience</label>
+                  <input type="text" value={editForm.experience} onChange={(e) => setEditForm({...editForm, experience: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" />
+                </div>
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button type="submit" className="flex-1 bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 font-medium">
+                  Save Changes
+                </button>
+                <button type="button" onClick={() => setShowSettingsModal(false)} className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 font-medium">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
