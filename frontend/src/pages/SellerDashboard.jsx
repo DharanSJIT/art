@@ -119,7 +119,7 @@ const SellerDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-[90vw] mx-auto">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center space-x-3">
               <img src="/src/assets/logo.png" alt="Handmade Nexus" className="h-12 w-auto" />
@@ -167,7 +167,7 @@ const SellerDashboard = () => {
         </div>
       </header>
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-[90vw] mx-auto py-6">
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="lg:w-72">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sticky top-24">
