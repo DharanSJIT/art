@@ -395,26 +395,30 @@ const SellerDashboard = () => {
     }
   ])
 
-  const [collaborators, setCollaborators] = useState([
-    {
-      id: 1,
-      name: 'Sarah Wilson',
-      skill: 'Painter',
-      rating: 4.8,
-      location: 'Chennai, TN',
-      experience: '3+ years',
-      image: 'https://via.placeholder.com/100x100?text=SW'
-    },
-    {
-      id: 2,
-      name: 'Mike Chen',
-      skill: 'Wood Carver',
-      rating: 4.9,
-      location: 'Bangalore, KA',
-      experience: '7+ years',
-      image: 'https://via.placeholder.com/100x100?text=MC'
-    }
-  ])
+  const [collaborators, setCollaborators] = useState([])
+
+  useEffect(() => {
+    const fetchSellers = async () => {
+      try {
+        const { collection, getDocs } = await import('firebase/firestore');
+        const { db } = await import('../firebase');
+        const sellersSnapshot = await getDocs(collection(db, 'sellers'));
+        const sellersData = sellersSnapshot.docs.map(doc => ({
+          id: doc.id,
+          name: doc.data().name || 'Unknown',
+          skill: doc.data().productType || 'Artisan',
+          rating: 4.5,
+          location: `${doc.data().city || ''}, ${doc.data().state || ''}`.trim().replace(/^,\s*|,\s*$/g, '') || 'India',
+          experience: doc.data().experience || 'N/A',
+          image: `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.data().name || 'User')}&background=fed7aa&color=ea580c&size=100`
+        }));
+        setCollaborators(sellersData);
+      } catch (error) {
+        console.error('Failed to fetch sellers:', error);
+      }
+    };
+    fetchSellers();
+  }, [])
 
   const [suppliers, setSuppliers] = useState([
     {
