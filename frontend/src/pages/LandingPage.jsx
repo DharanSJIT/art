@@ -168,7 +168,7 @@ const LandingPage = () => {
     <div className="min-h-screen bg-white">
       {/* Navigation Header */}
        <header className="sticky top-0 z-50 bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ width: '80vw' }}>
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
@@ -246,7 +246,7 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24" style={{ width: '80vw' }}>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="space-y-6">
@@ -266,14 +266,14 @@ const LandingPage = () => {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link 
-                  to="/signup?type=customer" 
+                  to="/login" 
                   className="bg-amber-600 text-white px-8 py-3 rounded-lg hover:bg-amber-700 transition-colors font-medium text-base flex items-center justify-center"
                 >
                   <ShoppingCart className="mr-2 w-5 h-5" />
                   Start Shopping
                 </Link>
                 <Link 
-                  to="/signup?type=seller" 
+                  to="/seller/register" 
                   className="border-2 border-amber-600 text-amber-600 px-8 py-3 rounded-lg hover:bg-amber-50 transition-colors font-medium text-base flex items-center justify-center"
                 >
                   <UsersIcon className="mr-2 w-5 h-5" />
@@ -333,7 +333,7 @@ const LandingPage = () => {
 
       {/* Stats Section */}
       <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ width: '85vw' }}>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Community in Numbers</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -355,7 +355,7 @@ const LandingPage = () => {
 
       {/* Categories Section */}
       <section id="categories" className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ width: '85vw' }}>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Explore by Craft</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -388,7 +388,7 @@ const LandingPage = () => {
 
       {/* Featured Products */}
       <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ width: '85vw' }}>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Curated Collections</h2>
             <p className="text-gray-600">Handpicked treasures from our talented artisans</p>
@@ -427,7 +427,7 @@ const LandingPage = () => {
 
       {/* Features Section */}
       <section id="features" className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ width: '85vw' }}>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Handmade Nexus?</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -451,7 +451,7 @@ const LandingPage = () => {
 
       {/* Mission & Vision */}
       <section id="about" className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ width: '85vw' }}>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
               <img 
@@ -500,7 +500,7 @@ const LandingPage = () => {
 
       {/* CTA Section */}
       <section className="bg-white py-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 text-center" style={{ width: '85vw', maxWidth: '48rem' }}>
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to Begin Your Journey?</h2>
             <p className="text-gray-600 mb-8">
@@ -529,7 +529,7 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-12" style={{ width: '85vw' }}>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-6">

@@ -102,7 +102,7 @@ const UserTypePage = () => {
       {/* Background Layer */}
       <BackgroundWaves />
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-[1100px] relative z-10 px-4">
+      <div className="mx-auto relative z-10 px-4" style={{ width: '78vw' }}>
         {/* Header Section */}
         <div className="text-center mb-16">
           <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
