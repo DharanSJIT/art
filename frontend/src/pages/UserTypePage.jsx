@@ -47,6 +47,7 @@ const UserTypePage = () => {
             <div className="w-full text-center bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors font-semibold mt-auto">
               Continue as Customer
             </div>
+            
           </div>
 
           {/* Seller Option */}

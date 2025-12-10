@@ -143,31 +143,24 @@ const LoginPage = () => {
               {/* Professional cards with subtle animations */}
               <div className="space-y-6 mb-12">
                 <div className="group p-5 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-xl">
-                  <div className="flex items-start gap-3 text-center">
-                   
-                    <div >
-                      <p className="font-medium mb-2 text-white text-center">
-                        Your Saved Artisans Update
-                      </p>
-                      <p className="text-white/70 text-sm font-light text-center">
-                        3 artisans have added new collections this week
-                      </p>
-                    </div>
+                  <div className="text-center">
+                    <p className="font-medium mb-2 text-white">
+                      Your Saved Artisans Update
+                    </p>
+                    <p className="text-white/70 text-sm font-light">
+                      3 artisans have added new collections this week
+                    </p>
                   </div>
                 </div>
 
                 <div className="group p-5 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-xl">
-                  <div className="flex items-start gap-3 text-center">
-                   
-                    <div>
-                      <p className="font-medium mb-2 text-white">
-                        Community Spotlight
-                      </p>
-                      <p className="text-white/70 text-sm font-light">
-                        Raj from Jaipur just completed a custom order similar to
-                        your interests
-                      </p>
-                    </div>
+                  <div className="text-center">
+                    <p className="font-medium mb-2 text-white">
+                      Community Spotlight
+                    </p>
+                    <p className="text-white/70 text-sm font-light">
+                      Raj from Jaipur just completed a custom order similar to your interests
+                    </p>
                   </div>
                 </div>
               </div>
@@ -515,14 +508,7 @@ const LoginPage = () => {
           </div>
 
           {/* Footer note */}
-          <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-sm text-gray-600 text-center">
-              Every login supports an artisan somewhere in India.
-              {/* <Link to="/how-we-help" className="text-amber-600 hover:text-amber-700 ml-1 transition-colors">
-                See how
-              </Link> */}
-            </p>
-          </div>
+        
 
           {/* Small human touch */}
           <div className="mt-8 text-center">
