@@ -104,7 +104,7 @@ const togglePassword = () => {
         </div>
 
       {/* Right side - Login Form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 md:p-8">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 md:p-8" style={{ backgroundImage: 'radial-gradient(circle, #d1d5db 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
         <div className="mx-auto w-full max-w-md">
           {/* Mobile Back Button */}
           <div className="lg:hidden mb-8">
@@ -131,7 +131,7 @@ const togglePassword = () => {
           </div>
 
           {/* Friendly greeting */}
-          <div className="mb-8">
+          <div className="mb-8 bg-white/80 backdrop-blur-sm p-6 rounded-lg">
             <h2 className="text-2xl lg:text-3xl text-2xl font-semibold text-gray-900 mb-3 text-center">
               Seller Login
             </h2>
@@ -209,7 +209,7 @@ const togglePassword = () => {
                     </span>
                   ) : (
                     <span className="text-gray-400 hover:text-gray-600 transition-colors">
-                      👁️🗨️
+                      🗨️
                     </span>
                   )}
                 </button>

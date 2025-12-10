@@ -199,7 +199,7 @@ const LoginPage = () => {
       </div>
 
       {/* Right side - Login Form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 md:p-8">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 md:p-8" style={{ backgroundImage: 'radial-gradient(circle, #d1d5db 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
         <div className="mx-auto w-full max-w-md">
           {/* Mobile Back Button */}
           <div className="lg:hidden mb-8">
