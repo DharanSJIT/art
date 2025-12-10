@@ -63,24 +63,10 @@ const togglePassword = () => {
 
 
   return (
-    // Main Container with a slightly darker background for contrast
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 relative">
-      
-      {/* Back Button - Fixed position outside form */}
-      <button
-        onClick={() => navigate('/user-type')}
-        className="absolute top-[5vh] text-xl left-[5vw] flex items-center text-primary-500 hover:text-primary-600 hover:transition-colors hover:underline z-50  p-4 rounded-full"
-      >
-        <ArrowLeft className="w-5 h-5 mr-2" />
-        Back to user
-      </button>
-      
-      {/* Login Card Container - Centered, rounded, shadowed, overflow hidden for image */}
-      <div className="bg-white w-[70vw] h-[70vh] shadow-2xl rounded-2xl overflow-hidden flex flex-col md:flex-row">
-        
+    <div className="min-h-screen bg-white flex">
+      <div className="w-full h-screen flex">
         {/* LEFT SIDE: Image Section */}
-        {/* Hidden on small screens, 50% width on medium+ screens */}
-        <div className="relative w-full md:w-1/2 h-64 md:h-auto hidden md:block">
+        <div className="relative w-1/2 hidden lg:block">
           <img 
             src={sidebarImage} 
             alt="Seller Handshake" 
@@ -99,17 +85,25 @@ const togglePassword = () => {
         </div>
 
         {/* RIGHT SIDE: Form Section */}
-        <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center items-center">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 md:p-8">
+          <button
+            onClick={() => navigate('/user-type')}
+            className="lg:hidden mb-8 inline-flex items-center text-primary-500 hover:text-primary-600 font-medium"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to user
+          </button>
+          <div className="mx-auto w-full max-w-md">
 
-      {/* Heading */}
-      <div className="text-center mb-10">
+          {/* Heading */}
+          <div className="text-center mb-10">
         <h1 className="text-3xl font-extrabold text-gray-800 tracking-wide uppercase">
           Seller Login
         </h1>
         <p className="text-gray-500 text-sm mt-2">Access your seller dashboard</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-7 w-[400px]">
+          <form onSubmit={handleSubmit} className="space-y-7">
 
         {/* Email Input */}
         <div className="relative group">
@@ -207,9 +201,9 @@ const togglePassword = () => {
             Register here
           </Link>
         </p>
-      </form>
-    </div>
-
+          </form>
+          </div>
+        </div>
       </div>
     </div>
   )

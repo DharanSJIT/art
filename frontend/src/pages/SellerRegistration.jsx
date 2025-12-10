@@ -167,30 +167,42 @@ const SellerRegistration = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-[50vw] mx-auto">
-        <div className="mb-8 text-center">
+    <div className="min-h-screen bg-white flex">
+      <div className="w-full h-screen flex">
+        {/* LEFT SIDE: Image Section */}
+        <div className="relative w-1/2 hidden lg:block">
+          <img 
+            src="/src/assets/seller_login.png" 
+            alt="Seller Registration" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/80 to-primary-600/40 mix-blend-multiply"></div>
+          <div className="absolute inset-0 flex items-center justify-center p-8 text-white text-center z-10">
+            <div>
+              <h2 className="text-3xl font-bold mb-4">Join Our Seller Community</h2>
+              <p className="text-primary-100">Start your journey with Handmade Nexus and reach thousands of craft enthusiasts</p>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT SIDE: Form Section */}
+        <div className="w-full lg:w-1/2 overflow-y-auto">
+          <div className="p-6 md:p-8">
           <button
             onClick={() => navigate("/user-type")}
-            className="absolute top-[2vh] text-xl left-[2vw] flex items-center text-primary-500 hover:text-primary-600 hover:transition-colors hover:underline z-50  p-4 rounded-full"
+            className="lg:hidden mb-8 inline-flex items-center text-primary-500 hover:text-primary-600 font-medium"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to user
           </button>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-extrabold text-gray-800 tracking-wide uppercase">
+              Seller Registration
+            </h1>
+            <p className="text-gray-500 text-sm mt-2">Fill in your details to start selling</p>
+          </div>
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 pt-4">
-            Seller Registration
-          </h1>
-          <p className="text-gray-600">
-            Please fill in your details to start selling on Handmade Nexus
-          </p>
-          {/* <p className="text-sm text-gray-500 mt-2">* Required fields</p> */}
-        </div>
-
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white shadow rounded-lg p-6 space-y-6"
-        >
+          <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
           <div className="space-y-6">
             <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">
@@ -590,10 +602,12 @@ const SellerRegistration = () => {
               disabled={loading}
               className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Submitting..." : "Continue to KYC"}
+              {loading ? "Submitting..." : "Register"}
             </button>
           </div>
         </form>
+          </div>
+        </div>
       </div>
     </div>
   );
