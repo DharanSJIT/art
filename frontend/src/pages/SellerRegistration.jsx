@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload } from "lucide-react";
+import sidebarImage from '../assets/seller_login.png';
 import { useAuth } from "../contexts/AuthContext";
 import { db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -172,7 +173,7 @@ const SellerRegistration = () => {
         {/* LEFT SIDE: Image Section */}
         <div className="relative w-1/2 hidden lg:block">
           <img 
-            src="/src/assets/seller_login.png" 
+            src={sidebarImage} 
             alt="Seller Registration" 
             className="absolute inset-0 w-full h-full object-cover"
           />

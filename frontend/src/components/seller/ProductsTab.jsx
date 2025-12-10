@@ -412,15 +412,7 @@ const ProductsTab = ({ currentUser, sellerData }) => {
                 : 'Try adjusting your search terms or filters to find what you\'re looking for.'
               }
             </p>
-            {myProducts.length === 0 && !isFormVisible && (
-              <button
-                onClick={() => setIsFormVisible(true)}
-                className="px-6 py-3 bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition-colors font-semibold flex items-center gap-2 mx-auto"
-              >
-                <Plus className="w-5 h-5" />
-                Add Your First Product
-              </button>
-            )}
+            
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
