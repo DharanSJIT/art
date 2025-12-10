@@ -1,37 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Star, DollarSign, CreditCard, CheckCircle, AlertCircle, FileText } from 'lucide-react'
+import { db } from '../../firebase'
+import { collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore'
+import { useAuth } from '../../contexts/AuthContext'
+import toast from 'react-hot-toast'
 
 const LoanTab = () => {
-  const [loanData] = useState({
-    currentLoans: [
-      {
-        id: 'LOAN001',
-        amount: 50000,
-        purpose: 'Raw Material Purchase',
-        status: 'active',
-        emi: 2500,
-        remainingAmount: 35000,
-        nextDueDate: '2024-02-15',
-        interestRate: 12.5,
-        tenure: '24 months'
-      },
-      {
-        id: 'LOAN002',
-        amount: 25000,
-        purpose: 'Equipment Purchase',
-        status: 'pending',
-        emi: 0,
-        remainingAmount: 25000,
-        nextDueDate: null,
-        interestRate: 11.0,
-        tenure: '18 months'
-      }
-    ],
+  const { currentUser } = useAuth()
+  const [loanData, setLoanData] = useState({
+    currentLoans: [],
     creditScore: 720,
     eligibleAmount: 75000,
-    totalDisbursed: 50000,
-    totalRepaid: 15000
+    totalDisbursed: 0,
+    totalRepaid: 0
   })
+  const [loading, setLoading] = useState(true)
 
   const [loanApplication, setLoanApplication] = useState({
     amount: '',
@@ -40,6 +23,44 @@ const LoanTab = () => {
     businessRevenue: '',
     collateral: ''
   })
+
+  useEffect(() => {
+    fetchLoans()
+  }, [])
+
+  const fetchLoans = async () => {
+    try {
+      setLoading(true)
+      const loansRef = collection(db, 'loans')
+      const q = query(loansRef, where('sellerId', '==', currentUser.uid))
+      const querySnapshot = await getDocs(q)
+      
+      const loans = []
+      let totalDisbursed = 0
+      let totalRepaid = 0
+      
+      querySnapshot.forEach((doc) => {
+        const loan = { id: doc.id, ...doc.data() }
+        loans.push(loan)
+        if (loan.status === 'active' || loan.status === 'completed') {
+          totalDisbursed += loan.amount
+          totalRepaid += (loan.amount - loan.remainingAmount)
+        }
+      })
+      
+      setLoanData(prev => ({
+        ...prev,
+        currentLoans: loans,
+        totalDisbursed,
+        totalRepaid
+      }))
+    } catch (error) {
+      console.error('Error fetching loans:', error)
+      toast.error('Failed to load loans')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getLoanStatusColor = (status) => {
     switch (status) {
@@ -56,9 +77,47 @@ const LoanTab = () => {
     }
   }
 
-  const handleLoanApplication = (e) => {
+  const handleLoanApplication = async (e) => {
     e.preventDefault()
-    console.log('Loan application submitted:', loanApplication)
+    try {
+      const loansRef = collection(db, 'loans')
+      await addDoc(loansRef, {
+        sellerId: currentUser.uid,
+        sellerEmail: currentUser.email,
+        amount: parseFloat(loanApplication.amount),
+        purpose: loanApplication.purpose,
+        tenure: loanApplication.tenure + ' months',
+        businessRevenue: parseFloat(loanApplication.businessRevenue),
+        collateral: loanApplication.collateral,
+        status: 'pending',
+        emi: 0,
+        remainingAmount: parseFloat(loanApplication.amount),
+        nextDueDate: null,
+        interestRate: 12.0,
+        createdAt: serverTimestamp()
+      })
+      
+      toast.success('Loan application submitted successfully!')
+      setLoanApplication({
+        amount: '',
+        purpose: '',
+        tenure: '',
+        businessRevenue: '',
+        collateral: ''
+      })
+      fetchLoans()
+    } catch (error) {
+      console.error('Error submitting loan application:', error)
+      toast.error('Failed to submit loan application')
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-gray-500">Loading loans...</div>
+      </div>
+    )
   }
 
   return (
