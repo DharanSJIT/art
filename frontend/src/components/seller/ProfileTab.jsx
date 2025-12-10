@@ -6,57 +6,57 @@ const ProfileTab = ({ sellerData }) => (
     {/* Header Section with Soft Background */}
     <div className="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden">
       <div className="relative">
-        <div className="h-[230px] bg-cover bg-center" style={{ backgroundImage: 'url(/src/assets/seller_bg.png)' }}></div>
-        
-        <div className="px-8 pb-8 relative">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between -mt-32">
-            <div className="flex flex-col md:flex-row md:items-end space-y-6 md:space-y-0 md:space-x-8">
-              {/* Profile Avatar Container */}
-              <div className="relative">
-                <div className="w-40 h-40 bg-white rounded-3xl border-6 border-white shadow-profile flex items-center justify-center">
-                  <div className="relative">
-                    <div className="absolute -inset-4 bg-orange-100 rounded-full opacity-20"></div>
-                    <User className="w-20 h-20 text-orange-700 relative" />
-                  </div>
-                </div>
-                <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-2 shadow-sm border border-gray-200">
-                  <Shield className="w-5 h-5 text-green-600" />
+        <div className="h-[240px] bg-cover bg-center" style={{ backgroundImage: 'url(/src/assets/seller_bg.png)' }}>
+          {/* Profile Section */}
+          <div className="absolute top-6 left-8 flex items-center space-x-6">
+            {/* Profile Avatar */}
+            <div className="relative">
+              <div className="w-40 h-40 bg-white rounded-3xl border-6 border-white shadow-profile flex items-center justify-center">
+                <div className="relative">
+                  <div className="absolute -inset-4 bg-orange-100 rounded-full opacity-20"></div>
+                  <User className="w-20 h-20 text-orange-700 relative" />
                 </div>
               </div>
-
-              {/* Profile Info */}
-              <div className="pb-24">
-                <div className="flex items-center space-x-3 mb-3">
-                  <h2 className="text-3xl font-bold text-gray-900">{sellerData.name}</h2>
-                  <div className="bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1  rounded-full">
-                    Verified Seller
-                  </div>
+              <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-2 shadow-sm border border-gray-200">
+                <Shield className="w-5 h-5 text-green-600" />
+              </div>
+            </div>
+            
+            {/* Profile Info */}
+            <div className="pt-4">
+              <div className="flex items-center space-x-3 mb-2">
+                <h2 className="text-3xl font-bold text-white drop-shadow-lg">{sellerData.name}</h2>
+                <div className="bg-white/90 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full">
+                  Verified Seller
+                </div>
+              </div>
+              
+              <p className="text-lg text-white font-semibold drop-shadow-lg mb-4">{sellerData.productType} Specialist</p>
+              
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center bg-white/90 px-3 py-1.5 rounded-lg">
+                  <Star className="w-4 h-4 text-amber-500 fill-current" />
+                  <span className="text-sm font-semibold text-gray-800 ml-1.5">{sellerData.rating}/5</span>
+                  <span className="text-xs text-gray-500 ml-2">Rating</span>
                 </div>
                 
-                <p className="text-lg text-white font-semibold drop-shadow-lg">{sellerData.productType} Specialist</p>
+                <div className="flex items-center bg-white/90 px-3 py-1.5 rounded-lg">
+                  <Package className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-semibold text-gray-800 ml-1.5">{sellerData.totalOrders}</span>
+                  <span className="text-xs text-gray-500 ml-2">Orders</span>
+                </div>
                 
-                <div className="flex flex-wrap items-center gap-4 mt-4">
-                  <div className="flex items-center bg-white px-3 py-1.5 rounded-lg border border-gray-200">
-                    <Star className="w-4 h-4 text-amber-500 fill-current" />
-                    <span className="text-sm font-semibold text-gray-800 ml-1.5">{sellerData.rating}/5</span>
-                    <span className="text-xs text-gray-500 ml-2">Rating</span>
-                  </div>
-                  
-                  <div className="flex items-center bg-white px-3 py-1.5 rounded-lg border border-gray-200">
-                    <Package className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm font-semibold text-gray-800 ml-1.5">{sellerData.totalOrders}</span>
-                    <span className="text-xs text-gray-500 ml-2">Orders</span>
-                  </div>
-                  
-                  <div className="flex items-center bg-white px-3 py-1.5 rounded-lg border border-gray-200">
-                    <Award className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm font-semibold text-gray-800 ml-1.5">{sellerData.experience}</span>
-                    <span className="text-xs text-gray-500 ml-2">Experience</span>
-                  </div>
+                <div className="flex items-center bg-white/90 px-3 py-1.5 rounded-lg">
+                  <Award className="w-4 h-4 text-purple-600" />
+                  <span className="text-sm font-semibold text-gray-800 ml-1.5">{sellerData.experience}</span>
+                  <span className="text-xs text-gray-500 ml-2">Experience</span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        
+        <div className="px-8 pb-8">
         </div>
       </div>
     </div>
