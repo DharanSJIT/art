@@ -198,7 +198,7 @@ const SellerDashboard = () => {
             {activeTab === 'products' && <ProductsTab currentUser={currentUser} sellerData={sellerData} />}
             {activeTab === 'orders' && <OrdersTab />}
             {activeTab === 'collaboration' && <CollaborationTab />}
-            {activeTab === 'supply' && <SupplyTab />}
+            {activeTab === 'supply' && <SupplyTab currentUser={currentUser} sellerData={sellerData} />}
             {activeTab === 'loan' && <LoanTab />}
             {activeTab === 'loaneval' && <LoanEvaluation />}
           </div>
