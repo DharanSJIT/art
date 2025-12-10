@@ -168,15 +168,8 @@ const SellerRegistration = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
-          {/* <button
-            onClick={() => navigate('/user-type')}
-            className="flex items-center text-primary-600 hover:text-primary-700 mb-4"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
-          </button> */}
+      <div className="w-[50vw] mx-auto">
+        <div className="mb-8 text-center">
           <button
             onClick={() => navigate("/user-type")}
             className="absolute top-[2vh] text-xl left-[2vw] flex items-center text-primary-500 hover:text-primary-600 hover:transition-colors hover:underline z-50  p-4 rounded-full"
@@ -191,7 +184,7 @@ const SellerRegistration = () => {
           <p className="text-gray-600">
             Please fill in your details to start selling on Handmade Nexus
           </p>
-          <p className="text-sm text-gray-500 mt-2">* Required fields</p>
+          {/* <p className="text-sm text-gray-500 mt-2">* Required fields</p> */}
         </div>
 
         <form
