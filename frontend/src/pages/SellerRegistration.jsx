@@ -177,11 +177,32 @@ const SellerRegistration = () => {
             alt="Seller Registration" 
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/80 to-primary-600/40 mix-blend-multiply"></div>
-          <div className="absolute inset-0 flex items-center justify-center p-8 text-white text-center z-10">
-            <div>
-              <h2 className="text-3xl font-bold mb-4">Join Our Seller Community</h2>
-              <p className="text-primary-100">Start your journey with Handmade Nexus and reach thousands of craft enthusiasts</p>
+          <div className="absolute inset-0 bg-black/60"></div>
+          
+          {/* Content container */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-white z-10">
+            <div className="max-w-lg text-center">
+              {/* Logo and branding */}
+              <div className="flex items-center justify-center gap-4 mb-12 bg-black/30 backdrop-blur-sm p-6 rounded-xl">
+                <img src="/src/assets/logo.png" alt="Handmade Nexus" className="h-16 w-auto" />
+                <div className="text-left">
+                  <h1 className="text-2xl font-bold tracking-tight text-white">
+                    Handmade Nexus
+                  </h1>
+                  <p className="text-white font-light italic mt-1">
+                    Where craftsmanship meets community
+                  </p>
+                </div>
+              </div>
+              
+              {/* Welcome Text */}
+              <h2 className="text-4xl font-bold mb-6">Join Our Seller Community</h2>
+              <p className="text-lg text-white/90 mb-6 leading-relaxed">
+                Start your journey with Handmade Nexus and reach thousands of craft enthusiasts.
+              </p>
+              <p className="text-base text-white/80 leading-relaxed">
+                Showcase your unique creations, connect with buyers, and grow your artisan business with our supportive community.
+              </p>
             </div>
           </div>
         </div>

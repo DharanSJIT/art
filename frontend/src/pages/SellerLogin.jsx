@@ -73,14 +73,32 @@ const togglePassword = () => {
             className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Overlay to make text readable and blend with theme */}
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/80 to-primary-600/40 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-black/60"></div>
           
-          {/* Welcome Text over image */}
-          <div className="absolute inset-0 flex items-center justify-center p-12 text-white text-center z-10">
-            <div className="max-w-lg">
-                <h2 className="text-4xl font-bold mb-4">Welcome Seller</h2>
-                <p className="text-lg text-primary-100 mb-6">Sign in to access your dashboard, manage products, and track your success.</p>
-                <p className="text-base text-primary-50 leading-relaxed">Manage your product inventory and pricing. Connect with buyers and other sellers. Track orders and grow your business.</p>
+          {/* Content container */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-white z-10">
+            <div className="max-w-lg text-center">
+              {/* Logo and branding */}
+              <div className="flex items-center justify-center gap-4 mb-12 bg-black/30 backdrop-blur-sm p-6 rounded-xl">
+                <img src="/src/assets/logo.png" alt="Handmade Nexus" className="h-16 w-auto" />
+                <div className="text-left">
+                  <h1 className="text-2xl font-bold tracking-tight text-white">
+                    Handmade Nexus
+                  </h1>
+                  <p className="text-white font-light italic mt-1">
+                    Where craftsmanship meets community
+                  </p>
+                </div>
+              </div>
+              
+              {/* Welcome Text */}
+              <h2 className="text-4xl font-bold mb-6">Welcome Back, Seller</h2>
+              <p className="text-lg text-white/90 mb-6 leading-relaxed">
+                Sign in to access your dashboard, manage products, and track your success.
+              </p>
+              <p className="text-base text-white/80 leading-relaxed">
+                Manage your product inventory and pricing. Connect with buyers and other sellers. Track orders and grow your business.
+              </p>
             </div>
           </div>
         </div>
