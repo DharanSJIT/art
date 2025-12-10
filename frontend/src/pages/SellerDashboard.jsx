@@ -13,23 +13,52 @@ const SellerDashboard = () => {
   const [sellerData, setSellerData] = useState({
     name: currentUser?.displayName || currentUser?.email || 'Seller',
     email: currentUser?.email || '',
-    phone: '+91 9876543210',
-    address: 'Chennai, Tamil Nadu',
-    productType: 'Pottery',
-    experience: '5+ years',
+    phone: '',
+    alternatePhoneNumber: '',
+    address: '',
+    city: '',
+    state: '',
+    pincode: '',
+    age: '',
+    productType: '',
+    experience: '',
     rating: 4.7,
     totalOrders: 0,
     completedOrders: 0
   })
 
   useEffect(() => {
-    if (currentUser) {
-      setSellerData(prev => ({
-        ...prev,
-        name: currentUser.displayName || currentUser.email || 'Seller',
-        email: currentUser.email || ''
-      }))
-    }
+    const fetchSellerData = async () => {
+      if (currentUser) {
+        try {
+          const { doc, getDoc } = await import('firebase/firestore');
+          const { db } = await import('../firebase');
+          const sellerDoc = await getDoc(doc(db, 'sellers', currentUser.uid));
+          if (sellerDoc.exists()) {
+            const data = sellerDoc.data();
+            setSellerData({
+              name: data.name || currentUser.displayName || currentUser.email || 'Seller',
+              email: data.email || currentUser.email || '',
+              phone: data.phoneNumber || '',
+              alternatePhoneNumber: data.alternatePhoneNumber || '',
+              address: data.address || '',
+              city: data.city || '',
+              state: data.state || '',
+              pincode: data.pincode || '',
+              age: data.age || '',
+              productType: data.productType || '',
+              experience: data.experience || '',
+              rating: 4.7,
+              totalOrders: 0,
+              completedOrders: 0
+            });
+          }
+        } catch (error) {
+          console.error('Failed to fetch seller data:', error);
+        }
+      }
+    };
+    fetchSellerData();
   }, [currentUser])
   const [loanData, setLoanData] = useState({
     currentLoans: [
@@ -460,27 +489,51 @@ const SellerDashboard = () => {
 
       {/* Business Info Card */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-        <h3 className="text-xl font-bold text-gray-900 mb-6">Business Information</h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-6">Personal Information</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">Full Name</label>
+            <p className="text-gray-900 text-lg">{sellerData.name}</p>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">Age</label>
+            <p className="text-gray-900 text-lg">{sellerData.age || 'N/A'}</p>
+          </div>
           <div className="space-y-1">
             <label className="block text-sm font-semibold text-gray-500">Email Address</label>
             <p className="text-gray-900 text-lg">{sellerData.email}</p>
           </div>
           <div className="space-y-1">
             <label className="block text-sm font-semibold text-gray-500">Phone Number</label>
-            <p className="text-gray-900 text-lg">{sellerData.phone}</p>
+            <p className="text-gray-900 text-lg">{sellerData.phone || 'N/A'}</p>
           </div>
-          <div className="space-y-1 md:col-span-2">
-            <label className="block text-sm font-semibold text-gray-500">Business Address</label>
-            <p className="text-gray-900 text-lg">{sellerData.address}</p>
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">Alternate Phone</label>
+            <p className="text-gray-900 text-lg">{sellerData.alternatePhoneNumber || 'N/A'}</p>
           </div>
           <div className="space-y-1">
             <label className="block text-sm font-semibold text-gray-500">Specialization</label>
-            <p className="text-gray-900 text-lg">{sellerData.productType}</p>
+            <p className="text-gray-900 text-lg">{sellerData.productType || 'N/A'}</p>
           </div>
           <div className="space-y-1">
             <label className="block text-sm font-semibold text-gray-500">Experience</label>
-            <p className="text-gray-900 text-lg">{sellerData.experience}</p>
+            <p className="text-gray-900 text-lg">{sellerData.experience || 'N/A'}</p>
+          </div>
+          <div className="space-y-1 md:col-span-2">
+            <label className="block text-sm font-semibold text-gray-500">Address</label>
+            <p className="text-gray-900 text-lg">{sellerData.address || 'N/A'}</p>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">City</label>
+            <p className="text-gray-900 text-lg">{sellerData.city || 'N/A'}</p>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">State</label>
+            <p className="text-gray-900 text-lg">{sellerData.state || 'N/A'}</p>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-semibold text-gray-500">Pincode</label>
+            <p className="text-gray-900 text-lg">{sellerData.pincode || 'N/A'}</p>
           </div>
         </div>
       </div>
@@ -1094,50 +1147,7 @@ const SellerDashboard = () => {
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Dashboard Overview - Only show on profile tab */}
-        {activeTab === 'profile' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <ShoppingBag className="w-6 h-6 text-orange-600" />
-                </div>
-                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+12%</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900">{myProducts.length}</h3>
-              <p className="text-sm text-gray-500 mt-1">Total Products</p>
-            </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Package className="w-6 h-6 text-blue-600" />
-                </div>
-                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+8%</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900">{sellerData.totalOrders}</h3>
-              <p className="text-sm text-gray-500 mt-1">Total Orders</p>
-            </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-green-600" />
-                </div>
-                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+23%</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900">₹{(myProducts.reduce((sum, p) => sum + (p.price * p.stockCount), 0)).toLocaleString()}</h3>
-              <p className="text-sm text-gray-500 mt-1">Inventory Value</p>
-            </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Star className="w-6 h-6 text-purple-600" />
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900">{sellerData.rating}</h3>
-              <p className="text-sm text-gray-500 mt-1">Seller Rating</p>
-            </div>
-          </div>
-        )}
-
+       
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Modern Sidebar */}
           <div className="lg:w-72">
