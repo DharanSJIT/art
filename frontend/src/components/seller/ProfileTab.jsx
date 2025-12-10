@@ -10,7 +10,7 @@ const ProfileTab = ({ sellerData }) => (
           {/* Profile Section */}
           <div className="absolute top-6 left-8 flex items-center space-x-6">
             {/* Profile Avatar */}
-            <div className="relative">
+            <div className="relative border-[3px] border-orange-500 rounded-[28px]">
               <div className="w-40 h-40 bg-white rounded-3xl border-6 border-white shadow-profile flex items-center justify-center">
                 <div className="relative">
                   <div className="absolute -inset-4 bg-orange-100 rounded-full opacity-20"></div>

@@ -99,7 +99,7 @@ const togglePassword = () => {
         </div>
 
         {/* RIGHT SIDE: Form Section */}
-        <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+        <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center items-center">
 
       {/* Heading */}
       <div className="text-center mb-10">
@@ -109,7 +109,7 @@ const togglePassword = () => {
         <p className="text-gray-500 text-sm mt-2">Access your seller dashboard</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-7">
+      <form onSubmit={handleSubmit} className="space-y-7 w-[400px]">
 
         {/* Email Input */}
         <div className="relative group">
